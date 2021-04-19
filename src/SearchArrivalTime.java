@@ -1,5 +1,6 @@
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
@@ -289,6 +290,34 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
     }
 
  */
+
+    public static String sortByTripID(String [] tripInformation){
+
+        String output = "";
+
+        int[] toBeSorted = new int[tripInformation.length];
+
+        for(int i = 0; i <  tripInformation.length; i++){
+            String currentString = tripInformation[i];
+            int result = Integer.parseInt(currentString.substring(0,7));
+            toBeSorted[i] = result;
+        }
+
+        int[] sortedArray = Arrays.copyOf(toBeSorted, toBeSorted.length);
+
+        Arrays.sort(sortedArray);
+
+        for(int i = 0; i <  sortedArray.length; i++) {
+            for(int j = 0; j <  sortedArray.length; j++) {
+                if(toBeSorted[i] == sortedArray[j])
+                {
+                    output += "\n" + tripInformation[j];
+                }
+
+            }
+        }
+        return output;
+    }
 
     public static void createBST(String fileToRead, SearchArrivalTime <String, String> st )
     {
