@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
+import java.util.ArrayList;
 
 /**
  * This file will search through the arrival times and return those that satisfy
@@ -14,24 +15,25 @@ import javax.swing.JOptionPane;
 
 public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
     private Node root;
-    public Value [] values;
+    public ArrayList<Value> values = new ArrayList<Value>();
     public int iterator = 0;
 
     private class Node {
         private Key key;
-        private Value val;
+        private ArrayList<Value> val;
         private Node left, right;
         private int size;
         private boolean alreadyVisited;
 
 
-        public Node(Key key, Value val, int size, boolean alreadyVisited){
+        public Node(Key key, ArrayList<Value> val, int size, boolean alreadyVisited){
             this.key = key;
             this.val = val;
             this.size = size;
             this.alreadyVisited = alreadyVisited;
         }
     }
+
 
     /**
      * Initializes an empty symbol table
@@ -48,6 +50,7 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
 
     public boolean isEmpty() {
         return size() == 0;
+
     }
 
     /**
@@ -83,11 +86,11 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
      * @throws IllegalArgumentException if {@code Key} is {@code null}
      */
 
-    public Value [] get(Key key){
+    public ArrayList<Value> get(Key key){
         return get(root, key);
     }
 
-    private Value [] get(Node x, Key key){
+    private ArrayList<Value> get(Node x, Key key){
 
         if(key == null) throw new IllegalArgumentException("calls get() with a null key");
         if(x == null) return null;
@@ -105,7 +108,8 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
         else if(cmp == 0 && x.alreadyVisited == false){
 
             x.alreadyVisited = true;
-            values[iterator] = x.val;
+            values.addAll(x.val);
+            iterator ++;
 
             if (x.left != null){
                 return get(x.left,key);
@@ -115,25 +119,7 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
             return values;
     }
 
-    /**
-     * Inserts speciifed key-value pair into the symbol table, overwriting old val
-     * with new value if st contains speicified key
-     * deletes speicifed key (and associated value) from ST
-     * if specified value is {@code null}
-     * @param key the key
-     * @param val the value
-     * @throws IllegalArgumentException if {@code key} is {@code null}
-     */
 
-    public void put(Key key, Value val){
-        if (key == null) throw new IllegalArgumentException("calls put() with a null key");
-        if (val == null){
-            delete(key);
-            return;
-        }
-        root = put(root,key,val);
-
-    }
 
     /**
      * Deletes Key
@@ -187,8 +173,27 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
         x.size = size(x.left) + size(x.right) + 1;
         return x;
     }
+    /**
+     * Inserts speciifed key-value pair into the symbol table, overwriting old val
+     * with new value if st contains speicified key
+     * deletes speicifed key (and associated value) from ST
+     * if specified value is {@code null}
+     * @param key the key
+     * @param val the value
+     * @throws IllegalArgumentException if {@code key} is {@code null}
+     */
 
-    private Node put(Node x, Key key, Value val){
+    public void put(Key key, ArrayList<Value> val){
+        if (key == null) throw new IllegalArgumentException("calls put() with a null key");
+        if (val == null){
+            delete(key);
+            return;
+        }
+        root = put(root,key,val);
+
+    }
+
+    private Node put(Node x, Key key, ArrayList<Value> val){
         if (x == null) return new Node(key,val,1,false);
 
         int cmp = key.compareTo(x.key);
@@ -215,8 +220,36 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
         return 1+ Math.max(height(x.left),height(x.right));
     }
 
+    public void sortTripId(Key arrivalTime){
+        boolean allValuesPulled = false;
+
+        ArrayList<Value> listOfTripValues = new ArrayList<Value>();
+
+        while (!allValuesPulled){
+            if(get(arrivalTime)!= null){
+                ArrayList x = get(arrivalTime);
+            }
+            else{
+                allValuesPulled = true;
+
+            }
+        }
+
+    }
 
 
+    public static void main(String[] args) {
+
+        SearchArrivalTime c = new SearchArrivalTime();
+
+        c.put(2,3);
+        c.put(1,3);
+        c.put(3,4);
+        c.put(4,5);
+
+        System.out.println(c.get(4));
+
+    }
 
 
 /*
@@ -256,4 +289,32 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
     }
 
  */
+
+    public static void createBST(String fileToRead, SearchArrivalTime <String, String> st )
+    {
+        try{
+            Scanner input = new Scanner(new FileInputStream(fileToRead));
+
+            while(input.hasNextLine())
+            {
+                String [] lineData = input.nextLine().trim().split(",");
+
+                String arrivalTime = lineData[1];
+
+
+                ArrayList<String> tripInformation = new ArrayList<>();
+
+                tripInformation.add(lineData[0] +  lineData[2] +
+                lineData[3] + lineData[4]  + lineData[5] +lineData[6] +  lineData[7] +lineData[8]);
+
+                st.put(arrivalTime, tripInformation);
+            }
+
+            input.close();
+        }catch(IOException e)
+        {
+            System.out.println("File not found");
+        }
+    }
 }
+
