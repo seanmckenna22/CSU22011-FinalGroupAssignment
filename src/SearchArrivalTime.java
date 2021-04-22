@@ -33,7 +33,7 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
      * @param st
      */
 
-    public static void createBST(String fileToRead, SearchArrivalTime<String, String> st) {
+    public static void createHashMap(String fileToRead, SearchArrivalTime<String, String> st) {
         try {
             Scanner input = new Scanner(new FileInputStream(fileToRead));
 
@@ -49,7 +49,7 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
                 String[] lineData = input.nextLine().trim().split(",");
                 line ++;
 
-                String arrivalTime = lineData[1];
+                String arrivalTime = lineData[1].trim();
 
                 String distanceTravelled = "";
                 if(lineData.length > 8){
@@ -74,7 +74,8 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
         }
     }
 
-    public static void printSortedTripsByArrivalTime(String arrivalTime,SearchArrivalTime<String,String> c){
+    public static String createStringForSortedTripsByArrivalTime(String arrivalTime,SearchArrivalTime<String,String> c){
+
         ArrayList<Trip> sortedTrips = c.getSortedTripsByArrivalTime(arrivalTime);
         String results = "";
 
@@ -84,13 +85,32 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
 
             results += sortedTrips.get(i).tripId +
                     " departure Time: " +  trip.departureTime +
-                    " Stop Id: " + trip.stopId +
-                    " Stop Sequence: " +  trip.stopSequence + "\n";
+                    " Stop Id: "  + trip.stopId +
+                    " Stop Sequence: " +  trip.stopSequence +
+                    " Stop Headsign: "  + trip.stopHeadSign +
+                    " Pick Up type: "  + trip.pickUpTypes +
+                    " Drop Off Type: "  + trip.dropOffType  +
+                    " Distance Travelled: "  +  trip.distanceTravelled + "\n";
 
         }
-        System.out.println(results);
-        System.out.println("************\n");
+        return results;
 
+    }
+
+    public static void manageRequest(String key){
+
+        SearchArrivalTime<String,String> c = new SearchArrivalTime<String,String>();
+        createHashMap("stop_times.txt",c);
+
+        String result = createStringForSortedTripsByArrivalTime(key,c);
+
+        if(result == null){
+            JOptionPane.showMessageDialog(null,"There is no time that matches your criteria \n" +
+                    "Please try again");
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Arrival Time " + key + "\n" + result);
+        }
     }
 
 
@@ -98,10 +118,7 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
 
         SearchArrivalTime<String,String> c = new SearchArrivalTime<String,String>();
 
-        createBST("stop_times.txt",c);
-
-        printSortedTripsByArrivalTime(" 5:29:24",c);
-        printSortedTripsByArrivalTime(" 8:18:24",c);
+        createHashMap("stop_times.txt",c);
 
 
 
