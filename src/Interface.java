@@ -23,7 +23,7 @@ public class Interface {
 
         if(result ==0)
         {
-            panel2.add(new JLabel("Return Trips by Arrival Time"));
+            SearchArrivalHandler.manageRequest();
         }
         else if(result==1)
         {
