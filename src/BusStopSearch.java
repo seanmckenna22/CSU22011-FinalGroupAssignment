@@ -13,15 +13,18 @@ public class BusStopSearch {
      */
     public static void manageRequest()
     {
-        Object[] options1 = { "Search by complete Bus Stop Name", "Search by first few characters" };
+        Object[] options1 = { "Search by Complete Bus Stop Name", "Search by First Few Characters" };
 
-        int result = JOptionPane.showOptionDialog(null, null, "Vancouver Bus Management System",
+        JPanel panel2 = new JPanel();
+        panel2.add(new JLabel("How would you like to to search for a bus stop?"));
+
+        int result = JOptionPane.showOptionDialog(null, panel2, "Vancouver Bus Management System",
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
                 options1, null);
 
         JPanel panel = new JPanel();
         panel.add(new JLabel("Enter Bus Stop: "));
-        JTextField textField = new JTextField(30);
+        JTextField textField = new JTextField(50);
         panel.add(textField);
 
         Object[] option2 = { "Enter"};
@@ -30,9 +33,12 @@ public class BusStopSearch {
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
                 option2, null);
 
+
         if(result2 ==0)
         {
-            TST.manageRequest(result, textField.getText());
+            String key = textField.getText();
+            key = key.toUpperCase();
+            TST.manageRequest(result, key);
         }
 
     }
