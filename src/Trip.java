@@ -17,14 +17,14 @@ public class Trip {
 
     public Trip(String tripId, String departureTime, String stopId, String stopSequence, String stopHeadSign, String pickUpTypes, String dropOffType, String distanceTravelled){
 
-        this.tripId = tripId;
-        this.departureTime = departureTime;
-        this.stopId = stopId;
-        this.stopSequence = stopSequence;
-        this.stopHeadSign = stopHeadSign;
-        this.pickUpTypes =  pickUpTypes;
-        this.dropOffType = dropOffType;
-        this.distanceTravelled = distanceTravelled;
+        this.tripId = tripId.trim();
+        this.departureTime = departureTime.trim();
+        this.stopId = stopId.trim();
+        this.stopSequence = stopSequence.trim();
+        this.stopHeadSign = stopHeadSign.trim();
+        this.pickUpTypes =  pickUpTypes.trim();
+        this.dropOffType = dropOffType.trim();
+        this.distanceTravelled = distanceTravelled.trim();
 
     }
 
