@@ -4,8 +4,7 @@ import javax.swing.JPanel;
 
 /**
  * This will be our interface control, providing the functionality to our project.
- * It will be run in the terminal
- * @param args
+ * It is run using JOptionPane
  */
 public class Interface {
 
@@ -40,7 +39,8 @@ public class Interface {
                 options2, null);
 
         if(result2 == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(null, "Goodbye");
+            JOptionPane.showMessageDialog(null, "Thank you for using the Vancouver Bus Management System \n" +
+                    "                                   Have a good day");
             result2 = 1;
         }
         else
@@ -52,7 +52,7 @@ public class Interface {
     }
 
     /**
-     * This main method runs in conjunction with the users command and continued utilisation of the service
+     * This main method runsfy in conjunction with the users command and continued utilisation of the service
      * When the user wants to quit the program terminates.
      *
      * @param args

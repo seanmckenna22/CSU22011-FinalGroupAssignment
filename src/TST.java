@@ -61,7 +61,7 @@ public class TST<Value> {
         if (key == null) {
             throw new IllegalArgumentException("calls get() with null argument");
         }
-        if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
+        if (key.length() == 0) return null;
         Node<Value> x = get(root, key, 0);
         if (x == null) return null;
         return x.val;
@@ -70,7 +70,7 @@ public class TST<Value> {
     // return subtrie corresponding to given key
     private Node<Value> get(Node<Value> x, String key, int d) {
         if (x == null) return null;
-        if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
+        if (key.length() == 0) return null;
         char c = key.charAt(d);
         if      (c < x.c)              return get(x.left,  key, d);
         else if (c > x.c)              return get(x.right, key, d);
@@ -195,7 +195,7 @@ public class TST<Value> {
                 String [] lineData = input.nextLine().trim().split(",");
 
                 String stopName = lineData[2];
-                stopName = MoveKeyword(stopName, st);
+                stopName = MoveKeyword(stopName);
 
                 String stopInformation = "// Stop id: " + lineData[0] + "// Stop Code: " + lineData[1] +
                         "// Stop Desc : " + lineData[3] + "// Stop Lat: " + lineData[4] +"// Stop Lon: " +
@@ -216,10 +216,10 @@ public class TST<Value> {
      * with the keyword flagstops moved to the end of the stop
      *
      *
-     * @param stops
-     * @return an array list of the stops with they words moved appropriately
+     * @param stop
+     * @return an String representation of the stop with they words moved appropriately
      */
-    public static String MoveKeyword(String stop, TST<String> st)
+    public static String MoveKeyword(String stop)
     {
         String newStop ="";
 
@@ -260,10 +260,10 @@ public class TST<Value> {
         //User requested to search by bus stops full name
         if(option==0)
         {
-            System.out.println(st.get(key));
             if(st.get(key) == null)
             {
-                JOptionPane.showMessageDialog(null, "That Bus Stop Does Not Exist");
+                JOptionPane.showMessageDialog(null, "That Bus Stop Does Not Exist \n" +
+                        "Please Enter a Valid Bus Stop");
             }
             else
             {
@@ -280,7 +280,8 @@ public class TST<Value> {
             }
             if(results =="")
             {
-                JOptionPane.showMessageDialog(null, "That Bus Stop Does Not Exist");
+                JOptionPane.showMessageDialog(null, "No bus stops matching them first " +
+                        "few characters were found. \n                              Please try again");
             }
             else
             {
