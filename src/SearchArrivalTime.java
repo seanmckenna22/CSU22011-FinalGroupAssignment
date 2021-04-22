@@ -75,7 +75,7 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
     }
 
     public static void printSortedTripsByArrivalTime(String arrivalTime,SearchArrivalTime<String,String> c){
-        ArrayList<Trip> sortedTrips = c.getSortedTripsByArrivalTime(arrivalTime.trim());
+        ArrayList<Trip> sortedTrips = c.getSortedTripsByArrivalTime(arrivalTime);
         String results = "";
 
         for (int i = 0; i < sortedTrips.size(); i++){
