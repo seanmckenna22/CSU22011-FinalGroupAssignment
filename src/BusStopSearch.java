@@ -11,6 +11,10 @@ public class BusStopSearch {
      * This will involve the implementation of a Ternary Search tree
      * We will also need to move key word flag stops from the start of the word to the end
      */
+
+    /**
+     * This method manages the users request from the interface, it controls the request that is made to search for the bus stop by name
+     */
     public static void manageRequest()
     {
         Object[] options1 = { "Search by Complete Bus Stop Name", "Search by First Few Characters" };

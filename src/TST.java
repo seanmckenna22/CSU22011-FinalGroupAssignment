@@ -178,7 +178,7 @@ public class TST<Value> {
     }
 
     /**
-     * This method creates the TST using the stops.txt file, filling it with the stops,
+     * This method creates and populates the TST using the stops.txt file, filling it with the stops,
      * and their respective stop id's as values to differentiate between the different stops
      *
      * @param fileToRead
@@ -221,27 +221,46 @@ public class TST<Value> {
      */
     public static String MoveKeyword(String stop)
     {
-        String newStop ="";
 
-        char[] ch = new char[stop.length()+1];
-
+        // Checking if the stop name contains keyword flagstops that need to be moved
+        char[] checkingCh = new char[stop.length()];
         for (int i = 0; i < stop.length(); i++) {
-            ch[i] = stop.charAt(i);
+            checkingCh[i] = stop.charAt(i);
         }
 
-        char firstLetter = ch[0];
-        char secondLetter = ch[1];
-        char space = ' ';
+        char checking = checkingCh[2];
+        if (Character.isWhitespace(checking))
+        {
+            String newStop ="";
 
-        ch[stop.length()-3] = space;
-        ch[stop.length()-2] = firstLetter;
-        ch[stop.length()-1] = secondLetter;
+            char[] ch = new char[stop.length()+3];
 
-        String str = String.valueOf(ch);
+            int chLength = stop.length() + 3;
 
-        newStop = str.substring(3);
+            for (int i = 0; i < stop.length(); i++) {
+                ch[i] = stop.charAt(i);
+            }
 
-        return newStop;
+            char firstLetter = ch[0];
+            char secondLetter = ch[1];
+            char space = ' ';
+
+            ch[chLength-3] = space;
+            ch[chLength-2] = firstLetter;
+            ch[chLength-1] = secondLetter;
+
+            String str = String.valueOf(ch);
+
+            newStop = str.substring(3);
+
+            return newStop;
+
+        }
+        else
+        {
+            return stop;
+        }
+
     }
 
     /**
@@ -267,10 +286,11 @@ public class TST<Value> {
             }
             else
             {
-                JOptionPane.showMessageDialog(null, st.get(key));
+                JOptionPane.showMessageDialog(null, key + st.get(key));
             }
 
         }
+
         //User requested to search by first few characters
         else if(option==1)
         {
