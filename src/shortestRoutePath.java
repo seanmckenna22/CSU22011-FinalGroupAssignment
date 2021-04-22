@@ -12,10 +12,10 @@ public class shortestRoutePath {
         final static int INF = 99999, V = 4;
 
     public class Dijkstra {
+
         private double[] distanceTo;          // distTo[v] = distance  of shortest s->v path
         private DirectedEdge[] edgeTo;    // edgeTo[v] = last edge on shortest s->v path
-        private IndexMinPQ<Double> pq;    // priority queue of vertices
-
+        private IndexMinPQ<Double> priorityQueue; //priority queue of vertices
         /**
          * Computes a shortest-paths tree from the source vertex {@code s} to every other
          * vertex in the edge-weighted digraph {@code G}.
@@ -42,11 +42,11 @@ public class shortestRoutePath {
             distanceTo[s] = 0.0;
 
             // relax vertices in order of distance from s
-            pq = new IndexMinPQ<Double>(G.V());
-            pq.insert(s, distanceTo[s]);
+            priorityQueue = new IndexMinPQ<Double>(G.V());
+            priorityQueue.insert(s, distanceTo[s]);
 
-            while (!pq.isEmpty()) {
-                int v = pq.delMin();
+            while (!priorityQueue.isEmpty()) {
+                int v = priorityQueue.delMin();
                 for (DirectedEdge e : G.adj(v))
                     relax(e);
             }
@@ -55,7 +55,7 @@ public class shortestRoutePath {
             assert check(G, s);
         }
 
-        // relax edge e and update pq if changed
+        // relax edge e and update priorityQueue if changed
         private void relax(DirectedEdge e) {
             int v = e.from();
             int w = e.to();
@@ -63,8 +63,8 @@ public class shortestRoutePath {
             if (distanceTo[w] > distanceTo[v] + e.weight()) {
                 distanceTo[w] = distanceTo[v] + e.weight();
                 edgeTo[w] = e;
-                if (pq.contains(w)) pq.decreaseKey(w, distTo[w]);
-                else                pq.insert(w, distTo[w]);
+                if (priorityQueue.contains(w)) priorityQueue.decreaseKey(w, distTo[w]);
+                else                priorityQueue.insert(w, distTo[w]);
             }
         }
 
@@ -115,8 +115,8 @@ public class shortestRoutePath {
 
 
         // check optimality conditions:
-        // (i) for all edges e:            distTo[e.to()] <= distTo[e.from()] + e.weight()
-        // (ii) for all edge e on the SPT: distTo[e.to()] == distTo[e.from()] + e.weight()
+        // (i) for all edges e:            distanceTo[e.to()] <= distanceTo[e.from()] + e.weight()
+        // (ii) for all edge e on the SPT: distanceTo[e.to()] == distanceTo[e.from()] + e.weight()
         private boolean check(EdgeWeightedDigraph G, int s) {
 
             // check that edge weights are non-negative
@@ -142,7 +142,7 @@ public class shortestRoutePath {
                 }
             }
 
-            // check that all edges e = v->w satisfy distTo[w] <= distTo[v] + e.weight()
+            // check that all edges e = v->w satisfy distanceTo[w] <= distanceTo[v] + e.weight()
             for (int v = 0; v < G.V(); v++) {
                 for (DirectedEdge e : G.adj(v)) {
                     int w = e.to();
@@ -154,7 +154,7 @@ public class shortestRoutePath {
                 }
             }
 
-            // check that all edges e = v->w on SPT satisfy distTo[w] == distTo[v] + e.weight()
+            // check that all edges e = v->w on SPT satisfy distanceTo[w] == distanceTo[v] + e.weight()
             for (int w = 0; w < G.V(); w++) {
                 if (edgeTo[w] == null) continue;
                 DirectedEdge e = edgeTo[w];
@@ -182,12 +182,13 @@ public class shortestRoutePath {
          * @param args the command-line arguments
          */
         public static void main(String[] args) {
+
             In in = new In(args[0]);
             EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
             int s = Integer.parseInt(args[1]);
 
             // compute shortest paths
-            Dijkstra shortestPath= new Dijkstra(G, s);
+            Dijkstra shortestPath = new Dijkstra(G, s);
 
             // print shortest path
             for (int t = 0; t < G.V(); t++) {
