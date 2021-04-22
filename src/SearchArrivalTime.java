@@ -1,10 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 import javax.swing.JOptionPane;
-import java.util.ArrayList;
 
 /**
  * This file will search through the arrival times and return those that satisfy
@@ -17,6 +14,7 @@ import java.util.ArrayList;
 public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
     private Node root;
     public Value[] values;
+    public  ArrayList<Value> valueArray = new ArrayList<>();
     public int iterator = 0;
 
     private class Node {
@@ -34,6 +32,8 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
             this.alreadyVisited = alreadyVisited;
         }
     }
+
+    public HashMap<String,ArrayList<Trip>> arrivalTimeMap = new HashMap<String,ArrayList<Trip>>();
 
 
     /**
@@ -88,11 +88,11 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
      * @throws IllegalArgumentException if {@code Key} is {@code null}
      */
 
-    public Value[] get(Key key) {
+    public ArrayList<Value> get(Key key) {
         return get(root, key);
     }
 
-    private Value[] get(Node x, Key key) {
+    private ArrayList<Value> get(Node x, Key key) {
 
         if (key == null) throw new IllegalArgumentException("calls get() with a null key");
         if (x == null) return null;
@@ -103,13 +103,13 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
 
         else if (cmp > 0) return get(x.right, key);
 
-        else if (cmp == 0 && x.alreadyVisited == true) {
+        else if (x.alreadyVisited) {
 
             return get(x.left, key);
-        } else if (cmp == 0 && x.alreadyVisited == false) {
+        } else {
 
             x.alreadyVisited = true;
-            values[iterator] = x.val;
+            valueArray.add(x.val);
             iterator++;
 
             if (x.left != null) {
@@ -117,7 +117,7 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
             }
 
         }
-        return values;
+        return valueArray;
     }
 
 
@@ -202,7 +202,9 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
         int cmp = key.compareTo(x.key);
 
         if (cmp < 0) x.left = put(x.left, key, val);
+
         else if (cmp > 0) x.right = put(x.right, key, val);
+
         else x.left = put(x.left, key, val);
 
         x.size = 1 + size(x.left) + size(x.right);
@@ -226,43 +228,6 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
     }
 
 
-/*
-    public static void createBST(String fileToRead)
-    {
-        try{
-            Scanner input = new Scanner(new FileInputStream(fileToRead));
-
-            while(input.hasNextLine())
-            {
-                String [] lineData = input.nextLine().trim().split(",");
-
-                String arrivalTime = lineData[1];
-
-                arrivalTime.trim().split(":");
-
-                String [] tripInformation;
-                        //= "\n// Trip id: " + lineData[0] + "// Departure Time: " + lineData[2] +
-                        //"// Stop Id : " + lineData[3] + "// Stop Sequence: " + lineData[4] +"// Stop headsign: " +
-                       // lineData[5] + "// pickup Type: " + lineData[6] + "// dropoff Type: " + lineData[7] + "// shape distance travelled: " + lineData[8];
-
-                for (int i = 0; i<tripInformation.length(); i+=9){
-
-                    if(lineData[0] > tripInformation[i]){
-
-                    }
-
-                }
-
-            }
-
-            input.close();
-        }catch(IOException e)
-        {
-            System.out.println("File not found");
-        }
-    }
-
- */
 
     /**
      * Sorts trip id's into the right order so it can be shown in the right order to the user
@@ -270,7 +235,11 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
      * @return output
      */
 
-    public static String sortByTripID(String[] tripInformation) {
+    public  String sortByTripID(Key x) {
+
+        ArrayList<Value> tripValues = get(x);
+
+        String [] tripInformation = tripValues.toArray(new String[tripValues.size()]);
 
         String output = "";
 
@@ -278,7 +247,7 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
 
         for (int i = 0; i < tripInformation.length; i++) {
             String currentString = tripInformation[i];
-            int result = Integer.parseInt(currentString.substring(7, 15));
+            int result = Integer.parseInt(currentString.substring(9, 16));
             toBeSorted[i] = result;
         }
 
@@ -297,6 +266,16 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
         return output;
     }
 
+    public  ArrayList<Trip> getSortedTripsByArrivalTime(String arrivalTime) {
+
+        ArrayList<Trip> tripValues = this.arrivalTimeMap.get(arrivalTime);
+
+        Collections.sort(tripValues, (trip1, trip2) -> trip1.tripId.compareTo(trip2.tripId));
+
+        return tripValues;
+
+    }
+
     /**
      * Creates a binary search tree reading in the files and then using put method to enter bst
      * @param fileToRead
@@ -307,16 +286,41 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
         try {
             Scanner input = new Scanner(new FileInputStream(fileToRead));
 
+            int line = 0;
+            String dump;
+
             while (input.hasNextLine()) {
+                if(line == 0){
+                    dump = input.nextLine();
+                    line ++;
+                }
+
                 String[] lineData = input.nextLine().trim().split(",");
+                line ++;
 
                 String arrivalTime = lineData[1];
 
-                String tripInformation = "Trip id: " + lineData[0] + "// Departure Time: " + lineData[2] +
+                String tripInformation = "Trip Id: " + lineData[0] + "// Departure Time: " + lineData[2] +
                         "// Stop Id : " + lineData[3] + "// Stop Sequence: " + lineData[4] + "// Stop headsign: " +
-                        lineData[5] + "// pickup Type: " + lineData[6] + "// dropoff Type: " + lineData[7] + "// shape distance travelled: " + lineData[8];
+                        lineData[5] + "// pickup Type: " + lineData[6] + "// dropoff Type: " + lineData[7] ; //"// shape distance travelled: " + lineData[8]
 
-                st.put(arrivalTime, tripInformation);
+               // st.put(arrivalTime, tripInformation);
+
+                String distanceTravelled = "";
+                if(lineData.length > 8){
+                    distanceTravelled = lineData[8];
+                }
+
+
+                Trip newTrip = new Trip(lineData[0],lineData[2],lineData[3],lineData[4],lineData[5],lineData[6],lineData[7],distanceTravelled);
+
+                if(!st.arrivalTimeMap.containsKey(arrivalTime)){
+                    st.arrivalTimeMap.put(arrivalTime,new ArrayList<>());
+
+                }
+
+                st.arrivalTimeMap.get(arrivalTime).add(newTrip);
+
             }
 
             input.close();
@@ -328,10 +332,25 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
 
     public static void main(String[] args) {
 
-        SearchArrivalTime c = new SearchArrivalTime();
+        SearchArrivalTime<String,String> c = new SearchArrivalTime<String,String>();
 
-        c.createBST("stop_times.txt",c);
+        createBST("stop_times.txt",c);
+        //System.out.println(c.sortByTripID(" 5:29:24"));
 
+        ArrayList<Trip> sortedTrips = c.getSortedTripsByArrivalTime(" 5:29:24");
+        String results = "";
+
+        for (int i = 0; i < sortedTrips.size(); i++){
+            Trip trip = sortedTrips.get(i);
+
+
+            results += sortedTrips.get(i).tripId +
+                    " departure Time: " +  trip.departureTime +
+                    " Stop Id: " + trip.stopId +
+                    " Stop Sequence: " +  trip.stopSequence + "\n";
+
+        }
+        System.out.println(results);
 
     }
 
