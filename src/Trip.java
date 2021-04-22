@@ -1,10 +1,9 @@
 public class Trip {
 
     /**
-     *  String tripInformation = "Trip Id: " + lineData[0] + "// Departure Time: " + lineData[2] +
-     *                         "// Stop Id : " + lineData[3] + "// Stop Sequence: " + lineData[4] + "// Stop headsign: " +
-     *                         lineData[5] + "// pickup Type: " + lineData[6] + "// dropoff Type: " + lineData[7] ; //"// shape distance travelled: " + lineData[8]
-     */
+     * This, class allows us to easily split and sort each line item in the array, by breaking each item into an index. We create an
+     * object called trip which stores the relevant values in the constructor.
+     **/
 
     String tripId;
     String departureTime;

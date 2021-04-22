@@ -97,32 +97,38 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
 
     }
 
+    /**
+     * This method manages the systems request to find the right key pair value
+     * @param key
+     */
+
     public static void manageRequest(String key){
+        String keyWithoutColon = key.replaceAll(":","");
+        int keyAsInt = Integer.parseInt(keyWithoutColon);
+
+        if(key == null || keyAsInt > 235959 || keyAsInt < 0){
+            JOptionPane.showMessageDialog(null,"The time entered is invalid, it must fall " +
+                    "between 0:00:00 and 23:59:59, thank you.");
+        }
 
         SearchArrivalTime<String,String> c = new SearchArrivalTime<String,String>();
         createHashMap("stop_times.txt",c);
+    try {
+            String result = createStringForSortedTripsByArrivalTime(key, c);
 
-        String result = createStringForSortedTripsByArrivalTime(key,c);
-
-        if(result == null){
-            JOptionPane.showMessageDialog(null,"There is no time that matches your criteria \n" +
-                    "Please try again");
+            if (result == null) {
+                JOptionPane.showMessageDialog(null, "There is no time that matches your criteria \n" +
+                        "Please try again");
+            } else {
+                JOptionPane.showMessageDialog(null, "Arrival Time " + key + "\n" + result);
+            }
         }
-        else{
-            JOptionPane.showMessageDialog(null, "Arrival Time " + key + "\n" + result);
+        catch(Exception e){
+        JOptionPane.showMessageDialog(null,"No valid input found, Please use the format H:MM:SS, thank you");
+
         }
     }
 
 
-    public static void main(String[] args) {
-
-        SearchArrivalTime<String,String> c = new SearchArrivalTime<String,String>();
-
-        createHashMap("stop_times.txt",c);
-
-
-
-
-    }
 
 }
