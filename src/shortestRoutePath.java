@@ -5,14 +5,14 @@ public class shortestRoutePath {
     /**
      * This is a skeleton file to find the shortest route path, display the route and
      * the associated costs of the route
-     * This will use a floyd Warshall Implementation
+     * This will use Dijkstra Implementation
      */
 
     
         final static int INF = 99999, V = 4;
 
-    public class DijkstraSP {
-        private double[] distTo;          // distTo[v] = distance  of shortest s->v path
+    public class Dijkstra {
+        private double[] distanceTo;          // distTo[v] = distance  of shortest s->v path
         private DirectedEdge[] edgeTo;    // edgeTo[v] = last edge on shortest s->v path
         private IndexMinPQ<Double> pq;    // priority queue of vertices
 
@@ -25,24 +25,26 @@ public class shortestRoutePath {
          * @throws IllegalArgumentException if an edge weight is negative
          * @throws IllegalArgumentException unless {@code 0 <= s < V}
          */
-        public DijkstraSP(EdgeWeightedDigraph G, int s) {
+        public Dijkstra(EdgeWeightedDigraph G, int s) {
+
             for (DirectedEdge e : G.edges()) {
                 if (e.weight() < 0)
                     throw new IllegalArgumentException("edge " + e + " has negative weight");
             }
 
-            distTo = new double[G.V()];
+            distanceTo = new double[G.V()];
             edgeTo = new DirectedEdge[G.V()];
 
             validateVertex(s);
 
             for (int v = 0; v < G.V(); v++)
-                distTo[v] = Double.POSITIVE_INFINITY;
-            distTo[s] = 0.0;
+                distanceTo[v] = Double.POSITIVE_INFINITY;
+            distanceTo[s] = 0.0;
 
             // relax vertices in order of distance from s
             pq = new IndexMinPQ<Double>(G.V());
-            pq.insert(s, distTo[s]);
+            pq.insert(s, distanceTo[s]);
+
             while (!pq.isEmpty()) {
                 int v = pq.delMin();
                 for (DirectedEdge e : G.adj(v))
@@ -55,9 +57,11 @@ public class shortestRoutePath {
 
         // relax edge e and update pq if changed
         private void relax(DirectedEdge e) {
-            int v = e.from(), w = e.to();
-            if (distTo[w] > distTo[v] + e.weight()) {
-                distTo[w] = distTo[v] + e.weight();
+            int v = e.from();
+            int w = e.to();
+
+            if (distanceTo[w] > distanceTo[v] + e.weight()) {
+                distanceTo[w] = distanceTo[v] + e.weight();
                 edgeTo[w] = e;
                 if (pq.contains(w)) pq.decreaseKey(w, distTo[w]);
                 else                pq.insert(w, distTo[w]);
@@ -71,9 +75,9 @@ public class shortestRoutePath {
          *         {@code Double.POSITIVE_INFINITY} if no such path
          * @throws IllegalArgumentException unless {@code 0 <= v < V}
          */
-        public double distTo(int v) {
+        public double distanceTo(int v) {
             validateVertex(v);
-            return distTo[v];
+            return distanceTo[v];
         }
 
         /**
@@ -86,7 +90,7 @@ public class shortestRoutePath {
          */
         public boolean hasPathTo(int v) {
             validateVertex(v);
-            return distTo[v] < Double.POSITIVE_INFINITY;
+            return distanceTo[v] < Double.POSITIVE_INFINITY;
         }
 
         /**
@@ -100,7 +104,9 @@ public class shortestRoutePath {
         public Iterable<DirectedEdge> pathTo(int v) {
             validateVertex(v);
             if (!hasPathTo(v)) return null;
+
             Stack<DirectedEdge> path = new Stack<DirectedEdge>();
+
             for (DirectedEdge e = edgeTo[v]; e != null; e = edgeTo[e.from()]) {
                 path.push(e);
             }
@@ -116,20 +122,22 @@ public class shortestRoutePath {
             // check that edge weights are non-negative
             for (DirectedEdge e : G.edges()) {
                 if (e.weight() < 0) {
-                    System.err.println("negative edge weight detected");
+                    System.err.println("Negative edge weight detected.");
                     return false;
                 }
             }
 
             // check that distTo[v] and edgeTo[v] are consistent
-            if (distTo[s] != 0.0 || edgeTo[s] != null) {
-                System.err.println("distTo[s] and edgeTo[s] inconsistent");
+            if (distanceTo[s] != 0.0 || edgeTo[s] != null) {
+                System.err.println("Both distanceTo[s] and edgeTo[s] inconsistent.");
                 return false;
             }
+
             for (int v = 0; v < G.V(); v++) {
                 if (v == s) continue;
-                if (edgeTo[v] == null && distTo[v] != Double.POSITIVE_INFINITY) {
-                    System.err.println("distTo[] and edgeTo[] inconsistent");
+
+                if (edgeTo[v] == null && distanceTo[v] != Double.POSITIVE_INFINITY) {
+                    System.err.println("Both distTo[] and edgeTo[] inconsistent.");
                     return false;
                 }
             }
@@ -138,8 +146,9 @@ public class shortestRoutePath {
             for (int v = 0; v < G.V(); v++) {
                 for (DirectedEdge e : G.adj(v)) {
                     int w = e.to();
-                    if (distTo[v] + e.weight() < distTo[w]) {
-                        System.err.println("edge " + e + " not relaxed");
+
+                    if (distanceTo[v] + e.weight() < distanceTo[w]) {
+                        System.err.println("edge " + e + " not relaxed.");
                         return false;
                     }
                 }
@@ -151,8 +160,8 @@ public class shortestRoutePath {
                 DirectedEdge e = edgeTo[w];
                 int v = e.from();
                 if (w != e.to()) return false;
-                if (distTo[v] + e.weight() != distTo[w]) {
-                    System.err.println("edge " + e + " on shortest path not tight");
+                if (distanceTo[v] + e.weight() != distanceTo[w]) {
+                    System.err.println("edge " + e + " on shortest path not tight.");
                     return false;
                 }
             }
@@ -161,9 +170,10 @@ public class shortestRoutePath {
 
         // throw an IllegalArgumentException unless {@code 0 <= v < V}
         private void validateVertex(int v) {
-            int V = distTo.length;
+            int V = distanceTo.length;
+
             if (v < 0 || v >= V)
-                throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1));
+                throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1) + ".");
         }
 
         /**
@@ -177,18 +187,19 @@ public class shortestRoutePath {
             int s = Integer.parseInt(args[1]);
 
             // compute shortest paths
-            DijkstraSP sp = new DijkstraSP(G, s);
-
+            Dijkstra shortestPath= new Dijkstra(G, s);
 
             // print shortest path
             for (int t = 0; t < G.V(); t++) {
                 if (sp.hasPathTo(t)) {
                     StdOut.printf("%d to %d (%.2f)  ", s, t, sp.distTo(t));
+
                     for (DirectedEdge e : sp.pathTo(t)) {
                         StdOut.print(e + "   ");
                     }
                     StdOut.println();
                 }
+
                 else {
                     StdOut.printf("%d to %d         no path\n", s, t);
                 }
