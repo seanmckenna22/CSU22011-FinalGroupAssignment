@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 
@@ -239,10 +240,30 @@ public class shortestRoutePath {
 
     }
 
+        public static void manageRequest(String key){
+
+            String keyWithoutColon = key.replaceAll(":", " ");
+
+            int keyAsInteger = Integer.parseInt(keyWithoutColon);
+
+            if(key == null){
+
+                JOptionPane.showMessageDialog(null, "The bus stop entered is invalid.");
+
+            }
+
+            shortestRoutePath<String,String> s = new shortestRoutePath<~>();
+
+            
+
+
+        }
+    }
+    /*
         private void fileReader(){
 
-            BufferedReader br = new BufferedReader(new FileReader(filename));
-            
+           BufferedReader br = new BufferedReader(new FileReader(filename));
+
         }
 
         private double getShortestDistance(){
@@ -252,7 +273,7 @@ public class shortestRoutePath {
         private int timeRequired(){
 
         }
-        
+    */
     }
     
     
