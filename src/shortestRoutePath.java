@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 
 public class shortestRoutePath {
 
@@ -182,6 +183,29 @@ public class shortestRoutePath {
                 throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1) + ".");
         }
 
+        public void getTripId(String fileToRead) {
+            try {
+                Scanner input = new Scanner(new FileInputStream(fileToRead));
+    
+                int line = 0;
+                String dump;
+    
+                while (input.hasNextLine()) {
+                    if(line == 0){
+                        dump = input.nextLine();
+                        line ++;
+                    }
+    
+                    String[] lineData = input.nextLine().trim().split(",");
+                    line ++;
+
+                    int tripId = lineData[0].trim();
+                input.close();
+            } catch (IOException e) {
+                System.out.println("File not found");
+            }
+        }
+
         /**
          * Unit tests the {@code DijkstraSP} data type.
          *
@@ -217,7 +241,7 @@ public class shortestRoutePath {
 
         private void fileReader(){
 
-            //BufferedReader br = new BufferedReader(new FileReader(filename));
+            BufferedReader br = new BufferedReader(new FileReader(filename));
             
         }
 
