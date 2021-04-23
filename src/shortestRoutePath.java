@@ -56,15 +56,18 @@ public class shortestRoutePath {
         }
 
         // relax edge e and update priorityQueue if changed
-        private void relax(DirectedEdge e) {
+        private void relax(DirectedEdge e){
             int v = e.from();
             int w = e.to();
 
-            if (distanceTo[w] > distanceTo[v] + e.weight()) {
+            if(distanceTo[w] > (distanceTo[v] + e.weight())){
                 distanceTo[w] = distanceTo[v] + e.weight();
                 edgeTo[w] = e;
-                if (priorityQueue.contains(w)) priorityQueue.decreaseKey(w, distTo[w]);
-                else                priorityQueue.insert(w, distTo[w]);
+                if(priorityQueue.contains(w)){
+                    priorityQueue.decreaseKey(w, distoTo[w]);
+                } else {
+                    priorityQueue.insert(w, distTo[w]);
+                }
             }
         }
 
@@ -103,7 +106,9 @@ public class shortestRoutePath {
          */
         public Iterable<DirectedEdge> pathTo(int v) {
             validateVertex(v);
-            if (!hasPathTo(v)) return null;
+            if (!hasPathTo(v)){
+                return null;
+            }
 
             Stack<DirectedEdge> path = new Stack<DirectedEdge>();
 
@@ -134,8 +139,9 @@ public class shortestRoutePath {
             }
 
             for (int v = 0; v < G.V(); v++) {
-                if (v == s) continue;
-
+                if (v == s) {
+                    continue;
+                }
                 if (edgeTo[v] == null && distanceTo[v] != Double.POSITIVE_INFINITY) {
                     System.err.println("Both distTo[] and edgeTo[] inconsistent.");
                     return false;
