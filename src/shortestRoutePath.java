@@ -10,8 +10,8 @@ public class shortestRoutePath {
      * This will use Dijkstra Implementation
      */
 
-    
-        final static int INF = 99999, V = 4;
+
+    final static int INF = 99999, V = 4;
 
     public class Dijkstra {
 
@@ -208,6 +208,7 @@ public class shortestRoutePath {
                     System.out.println("File not found");
                 }
             }
+<<<<<<< Updated upstream
 
             /**
              * Unit tests the {@code DijkstraSP} data type.
@@ -295,17 +296,61 @@ public class shortestRoutePath {
         private void fileReader(){
 
            BufferedReader br = new BufferedReader(new FileReader(filename));
+=======
+
+            /**
+             * Unit tests the {@code DijkstraSP} data type.
+             *
+             * @param args the command-line arguments
+             */
+            public static void main (String[]args){
+
+                In in = new In(args[0]);
+                EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
+                int s = Integer.parseInt(args[1]);
+
+                // compute shortest paths
+                Dijkstra shortestPath = new Dijkstra(G, s);
+
+                // print shortest path
+                for (int t = 0; t < G.V(); t++) {
+                    if (sp.hasPathTo(t)) {
+                        StdOut.printf("%d to %d (%.2f)  ", s, t, sp.distTo(t));
+
+                        for (DirectedEdge e : sp.pathTo(t)) {
+                            StdOut.print(e + "   ");
+                        }
+                        StdOut.println();
+                    } else {
+                        StdOut.printf("%d to %d         no path\n", s, t);
+                    }
+                }
+            }
 
         }
 
-        private double getShortestDistance(){
+
+        private void fileReader() {
+
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+>>>>>>> Stashed changes
 
         }
 
-        private int timeRequired(){
+        private double getShortestDistance() {
 
         }
+
+        private int timeRequired() {
+
+        }
+<<<<<<< Updated upstream
     */
+=======
+
+>>>>>>> Stashed changes
     }
+
+}
     
     
