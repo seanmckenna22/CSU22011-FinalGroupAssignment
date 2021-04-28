@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 public class shortestRoutePath {
 
@@ -187,7 +188,7 @@ public class shortestRoutePath {
                 throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1) + ".");
         }
 
-        public void getTripId(String fileToRead) {
+        public ArrayList<Integer> getTripId(String fileToRead) {
 
             ArrayList<Integer> tripIds = new ArrayList<>();
             try {
@@ -206,11 +207,38 @@ public class shortestRoutePath {
                     int tripId = lineData[0].trim();
                     tripIds.add(tripId);
                     line++;
-
+                }
                     input.close();
                 } catch(IOException e){
-                    System.out.println("File not found");
+                    System.err.println("File not found");
                 }
+                return tripIds;
+            }
+
+        public ArrayList<Integer> getStopId(String fileToRead){
+            ArrayList<Integer> stopIds = new ArrayList<>();
+            try{
+                Scanner readInput = new Scanner(new FileInputSTream(fileToRead));
+
+                int line = 0;
+                String dump;
+
+                while (readInput.hasNextLine()){
+                    if(line == 0){
+                        dump = input.nextLine();
+                        line ++;
+                    }
+
+                    String[] lineData = input.nextLine().trim().split(",");
+                    int stopId = lineData[3].trim();
+                    stopIds.add(stopId);
+                    line++;
+                }
+                    readInput.close();
+                } catch(IOException e){
+                    System.err.println("File not found");
+                }
+                return stopIds;
             }
 
             /**
