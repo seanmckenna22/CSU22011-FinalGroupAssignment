@@ -10,14 +10,15 @@ public class shortestRoutePath {
      * This will use Dijkstra Implementation
      */
 
-
-    final static int INF = 99999, V = 4;
+    
+        final static int INF = 99999, V = 4;
 
     public class Dijkstra {
 
         private double[] distanceTo;          // distTo[v] = distance  of shortest s->v path
         private DirectedEdge[] edgeTo;    // edgeTo[v] = last edge on shortest s->v path
         private IndexMinPQ<Double> priorityQueue; //priority queue of vertices
+        public int infinity = Integer.MAX_VALUE;
 
         /**
          * Computes a shortest-paths tree from the source vertex {@code s} to every other
@@ -187,6 +188,8 @@ public class shortestRoutePath {
         }
 
         public void getTripId(String fileToRead) {
+
+            ArrayList<Integer> tripIds = new ArrayList<>();
             try {
                 Scanner input = new Scanner(new FileInputStream(fileToRead));
 
@@ -200,22 +203,22 @@ public class shortestRoutePath {
                     }
 
                     String[] lineData = input.nextLine().trim().split(",");
+                    int tripId = lineData[0].trim();
+                    tripIds.add(tripId);
                     line++;
 
-                    int tripId = lineData[0].trim();
                     input.close();
                 } catch(IOException e){
                     System.out.println("File not found");
                 }
             }
-<<<<<<< Updated upstream
 
             /**
              * Unit tests the {@code DijkstraSP} data type.
              *
              * @param args the command-line arguments
              */
-            public static void main (String[]args){
+            public static void main(String[] args){
 
                 In in = new In(args[0]);
                 EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
@@ -292,65 +295,65 @@ public class shortestRoutePath {
                 }
         }
     }
-    /*
-        private void fileReader(){
+    
+        
+        /*
 
-           BufferedReader br = new BufferedReader(new FileReader(filename));
-=======
+String[] lineData = input.nextLine().trim().split(",");
+                line ++;
 
-            /**
-             * Unit tests the {@code DijkstraSP} data type.
-             *
-             * @param args the command-line arguments
-             */
-            public static void main (String[]args){
+                String arrivalTime = lineData[1].trim();
 
-                In in = new In(args[0]);
-                EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
-                int s = Integer.parseInt(args[1]);
+                String distanceTravelled = "";
+                if(lineData.length > 8){
+                    distanceTravelled = lineData[8];
+                }
 
-                // compute shortest paths
-                Dijkstra shortestPath = new Dijkstra(G, s);
 
-                // print shortest path
-                for (int t = 0; t < G.V(); t++) {
-                    if (sp.hasPathTo(t)) {
-                        StdOut.printf("%d to %d (%.2f)  ", s, t, sp.distTo(t));
+                Trip newTrip = new Trip(lineData[0],lineData[2],lineData[3],lineData[4],lineData[5],lineData[6],lineData[7],distanceTravelled);
 
-                        for (DirectedEdge e : sp.pathTo(t)) {
-                            StdOut.print(e + "   ");
-                        }
-                        StdOut.println();
-                    } else {
-                        StdOut.printf("%d to %d         no path\n", s, t);
+                if(!st.arrivalTimeMap.containsKey(arrivalTime)){
+                    st.arrivalTimeMap.put(arrivalTime,new ArrayList<>());
+
+                }
+
+                st.arrivalTimeMap.get(arrivalTime).add(newTrip);
+
+            }
+            */
+
+        private double getShortestDistance(int k){
+            boolean[] isShortest = new boolean[distanceTo.length];
+            
+            isShortest[k] = true;
+
+            while(true){
+                int x = -1;
+                for(int i = 0; i < distanceTo.length; i++){
+                    if((!isShortest[i]) && distanceTo[k][i] != infinity){
+                        x = i;
+                        break;
+                    }
+                }
+                if(x == -1){
+                    return null;
+                }
+
+                isShortest[x] = true;
+
+                for(int i = 0; i < distanceTo.length; i++){
+                    if(distanceTo[k][x] + distanceTo[x][i] < distanceTo[k][i]){
+                        distanceTo[k][i] = distanceTo[k][x] + distanceTo[x][i];
+
+                        isShortest[i] = false;
+                        edgeTo[k][i] = x;
                     }
                 }
             }
-
+            return distanceTo.length;
         }
-
-
-        private void fileReader() {
-
-            BufferedReader br = new BufferedReader(new FileReader(filename));
->>>>>>> Stashed changes
-
-        }
-
-        private double getShortestDistance() {
-
-        }
-
-        private int timeRequired() {
-
-        }
-<<<<<<< Updated upstream
-    */
-=======
-
->>>>>>> Stashed changes
+        //Total cost of transfers is getShortestDistance output
+    
     }
-
-}
     
     
