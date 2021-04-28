@@ -274,6 +274,8 @@ public class shortestRoutePath {
 
         public static void manageRequest(String key) {
 
+            public HashMap<String,ArrayList<Trip>> busStopMap = new HashMap<String,ArrayList<Trip>>();
+
             //User enters first bus stop number
             JPanel panel1 = new JPanel();
             panel1.add(new JLabel("Please Enter the First Bus Stop Number:"));
@@ -323,7 +325,78 @@ public class shortestRoutePath {
                 }
         }
     }
-    
+
+    public static void createHashMap(String fileToRead, shortestRoutePath<String,String> st) {
+        try {
+            Scanner input = new Scanner(new FileInputStream(fileToRead));
+
+            int line = 0;
+            String dump;
+
+            while (input.hasNextLine()) {
+                if (line == 0) {
+                    dump = input.nextLine();
+                    line++;
+                }
+
+                String[] lineData = input.nextLine().trim().split(",");
+                line++;
+
+                if (fileToRead == "stop_times.txt") {
+                    String stopID = lineData[3].trim();
+
+
+                    String distanceTravelled = "";
+                    if (lineData.length > 8) {
+                        distanceTravelled = lineData[8];
+                    }
+
+
+                    Trip newStop = new Trip(lineData[0], lineData[2], lineData[3], lineData[4], lineData[5], lineData[6], lineData[7], distanceTravelled);
+
+                    if (!st.busTimeMap.containsKey(stopID)) {
+                        st.busTimeMap.put(stopID, new ArrayList<>());
+
+                    }
+
+                    st.busTimeMap.get(stopID).add(newStop);
+
+                }
+            }
+            input.close();
+
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
+    }
+
+    public  ArrayList<Trip> getBusStops(String busStop) {
+
+        ArrayList<Trip> busStopValues = this.busTimeMap.get(busStop);
+
+        Collections.sort(busStopValues, (busStop1, busStop2) -> busStop1.busStop.compareTo(busStop2.busStop));
+
+        return busStopValues;
+
+    }
+
+    public static String createStringForBusStopsEnRoute(String busStop,shortestRoutePath<String,String> c){
+
+        ArrayList<Trip> sortedBusStops = c.getBusStops(busStop);
+        String results = "";
+
+        for (int i = 0; i < sortedTrips.size(); i++){
+            Trip busStopNumber = sortedTrips.get(i);
+
+
+            results += sortedBusStops.get(i).busStop +
+                    " Stop Id: "  + busStopNumber.stopId +
+                    " Distance Travelled: "  +  busStopNumber.distanceTravelled + "\n";
+
+        }
+        return results;
+
+    }
         
         /*
 
@@ -383,5 +456,3 @@ String[] lineData = input.nextLine().trim().split(",");
         //Total cost of transfers is getShortestDistance output
     
     }
-    
-    
