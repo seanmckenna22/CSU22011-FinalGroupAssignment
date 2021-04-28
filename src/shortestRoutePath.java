@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import javax.swing.JOptionPane;
+import java.util.*;
 
 public class shortestRoutePath {
 
@@ -11,8 +13,8 @@ public class shortestRoutePath {
      * This will use Dijkstra Implementation
      */
 
-    
-        final static int INF = 99999, V = 4;
+
+       // final static int INF = 99999, V = 4;
 
     public class Dijkstra {
 
@@ -188,90 +190,37 @@ public class shortestRoutePath {
                 throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1) + ".");
         }
 
-        public ArrayList<Integer> getTripId(String fileToRead) {
 
-            ArrayList<Integer> tripIds = new ArrayList<>();
-            try {
-                Scanner input = new Scanner(new FileInputStream(fileToRead));
+        /**
+         * Unit tests the {@code DijkstraSP} data type.
+         *
+         * @param args the command-line arguments
+         */
+        public static void main(String[] args) {
 
-                int line = 0;
-                String dump;
+            In in = new In(args[0]);
+            EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
+            int s = Integer.parseInt(args[1]);
 
-                while (input.hasNextLine()) {
-                    if (line == 0) {
-                        dump = input.nextLine();
-                        line++;
+            // compute shortest paths
+            Dijkstra shortestPath = new Dijkstra(G, s);
+
+            // print shortest path
+            for (int t = 0; t < G.V(); t++) {
+                if (sp.hasPathTo(t)) {
+                    StdOut.printf("%d to %d (%.2f)  ", s, t, sp.distTo(t));
+
+                    for (DirectedEdge e : sp.pathTo(t)) {
+                        StdOut.print(e + "   ");
                     }
-
-                    String[] lineData = input.nextLine().trim().split(",");
-                    int tripId = lineData[0].trim();
-                    tripIds.add(tripId);
-                    line++;
-                }
-                    input.close();
-                } catch(IOException e){
-                    System.err.println("File not found");
-                }
-                return tripIds;
-            }
-
-        public ArrayList<Integer> getStopId(String fileToRead){
-            ArrayList<Integer> stopIds = new ArrayList<>();
-            try{
-                Scanner readInput = new Scanner(new FileInputSTream(fileToRead));
-
-                int line = 0;
-                String dump;
-
-                while (readInput.hasNextLine()){
-                    if(line == 0){
-                        dump = input.nextLine();
-                        line ++;
-                    }
-
-                    String[] lineData = input.nextLine().trim().split(",");
-                    int stopId = lineData[3].trim();
-                    stopIds.add(stopId);
-                    line++;
-                }
-                    readInput.close();
-                } catch(IOException e){
-                    System.err.println("File not found");
-                }
-                return stopIds;
-            }
-
-            /**
-             * Unit tests the {@code DijkstraSP} data type.
-             *
-             * @param args the command-line arguments
-             */
-            public static void main(String[] args){
-
-                In in = new In(args[0]);
-                EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
-                int s = Integer.parseInt(args[1]);
-
-                // compute shortest paths
-                Dijkstra shortestPath = new Dijkstra(G, s);
-
-                // print shortest path
-                for (int t = 0; t < G.V(); t++) {
-                    if (sp.hasPathTo(t)) {
-                        StdOut.printf("%d to %d (%.2f)  ", s, t, sp.distTo(t));
-
-                        for (DirectedEdge e : sp.pathTo(t)) {
-                            StdOut.print(e + "   ");
-                        }
-                        StdOut.println();
-                    } else {
-                        StdOut.printf("%d to %d         no path\n", s, t);
-                    }
+                    StdOut.println();
+                } else {
+                    StdOut.printf("%d to %d         no path\n", s, t);
                 }
             }
-
         }
-
+    }
+master
         public static void manageRequest() {
 
             public HashMap<String,ArrayList<Trip>> busStopMap = new HashMap<String,ArrayList<Trip>>();
@@ -309,19 +258,21 @@ public class shortestRoutePath {
                     JOptionPane.showMessageDialog(null, "The bus stop number is invalid, please re-enter a valid bus stop number");
                 }
 
-                shortestRoutePath<String,String> s = new shortestRoutePath<String, String>();
+                shortestRoutePath<String, String> s = new shortestRoutePath<String,String>();
+                createHashMap("stop_times.txt", s);
 
-                Dijkstra( , );
+               // Dijkstra( , );
 
                 try{
-                    String result = Dijkstra( , );
+                    String result = createStringForBusStopsEnRoute(key, s);
 
                     if(result == null){
                         JOptionPane.showMessageDialog(null, "There is no route between the chosen two bus stops");
                     }
                     else{
-                        JOptionPane.showMessageDialog(null, "Routes en route from the first stop to the second: FILL and the shortest distance is:");
+                        JOptionPane.showMessageDialog(null, "Bus Stop " + key + "\n" + result);
                     }
+                    // "Routes en route from the first stop to the second: FILL and the shortest distance is:"
                 }
         }
     }
@@ -425,7 +376,7 @@ String[] lineData = input.nextLine().trim().split(",");
 
         private double getShortestDistance(int k){
             boolean[] isShortest = new boolean[distanceTo.length];
-            
+
             isShortest[k] = true;
 
             while(true){
@@ -454,5 +405,6 @@ String[] lineData = input.nextLine().trim().split(",");
             return distanceTo.length;
         }
         //Total cost of transfers is getShortestDistance output
-    
+
     }
+
