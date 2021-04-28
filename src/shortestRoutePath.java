@@ -16,7 +16,7 @@ public class shortestRoutePath {
 
        // final static int INF = 99999, V = 4;
 
-    public class Dijkstra <Key extends Comparable <Key>,Value> {
+    public class Dijkstra {
 
         private double[] distanceTo;          // distanceTo[v] = distance  of shortest s->v path
         private DirectedEdge[] edgeTo;        // edgeTo[v] = last edge on shortest s->v path
@@ -191,35 +191,35 @@ public class shortestRoutePath {
         }
 
 
-            /**
-             * Unit tests the {@code DijkstraSP} data type.
-             *
-             * @param args the command-line arguments
-             */
-            public static void main(String[] args){
+        /**
+         * Unit tests the {@code DijkstraSP} data type.
+         *
+         * @param args the command-line arguments
+         */
+        public static void main(String[] args) {
 
-                In in = new In(args[0]);
-                EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
-                int s = Integer.parseInt(args[1]);
+            In in = new In(args[0]);
+            EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
+            int s = Integer.parseInt(args[1]);
 
-                // compute shortest paths
-                Dijkstra shortestPath = new Dijkstra(G, s);
+            // compute shortest paths
+            Dijkstra shortestPath = new Dijkstra(G, s);
 
-                // print shortest path
-                for (int t = 0; t < G.V(); t++) {
-                    if (sp.hasPathTo(t)) {
-                        StdOut.printf("%d to %d (%.2f)  ", s, t, sp.distTo(t));
+            // print shortest path
+            for (int t = 0; t < G.V(); t++) {
+                if (sp.hasPathTo(t)) {
+                    StdOut.printf("%d to %d (%.2f)  ", s, t, sp.distTo(t));
 
-                        for (DirectedEdge e : sp.pathTo(t)) {
-                            StdOut.print(e + "   ");
-                        }
-                        StdOut.println();
-                    } else {
-                        StdOut.printf("%d to %d         no path\n", s, t);
+                    for (DirectedEdge e : sp.pathTo(t)) {
+                        StdOut.print(e + "   ");
                     }
+                    StdOut.println();
+                } else {
+                    StdOut.printf("%d to %d         no path\n", s, t);
                 }
             }
-
+        }
+    }
         public static void manageRequest() {
 
             public HashMap<String,ArrayList<Trip>> busStopMap = new HashMap<String,ArrayList<Trip>>();
@@ -407,4 +407,3 @@ String[] lineData = input.nextLine().trim().split(",");
 
     }
 
-    }
