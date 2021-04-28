@@ -18,6 +18,8 @@ public class shortestRoutePath {
 
     public class Dijkstra <Key extends Comparable <Key>,Value> {
 
+        public HashMap<String,ArrayList<Trip>> busStopMap = new HashMap<String,ArrayList<Trip>>();
+
         private double[] distanceTo;          // distanceTo[v] = distance  of shortest s->v path
         private DirectedEdge[] edgeTo;        // edgeTo[v] = last edge on shortest s->v path
         private IndexMinPQ<Double> priorityQueue; //priority queue of vertices
@@ -221,7 +223,7 @@ public class shortestRoutePath {
             }
 
 
-    public HashMap<String,ArrayList<Trip>> busStopMap = new HashMap<String,ArrayList<Trip>>();
+
 
         public static void manageRequest() {
 
