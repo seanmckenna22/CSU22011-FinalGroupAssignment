@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import javax.swing.JOptionPane;
+import java.util.*;
 
 public class shortestRoutePath {
 
@@ -11,10 +13,10 @@ public class shortestRoutePath {
      * This will use Dijkstra Implementation
      */
 
-    
+
         final static int INF = 99999, V = 4;
 
-    public class Dijkstra {
+    public class Dijkstra <Key extends Comparable <Key>,Value> {
 
         private double[] distanceTo;          // distanceTo[v] = distance  of shortest s->v path
         private DirectedEdge[] edgeTo;        // edgeTo[v] = last edge on shortest s->v path
@@ -188,58 +190,6 @@ public class shortestRoutePath {
                 throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1) + ".");
         }
 
-        public ArrayList<Integer> getTripId(String fileToRead) {
-
-            ArrayList<Integer> tripIds = new ArrayList<>();
-            try {
-                Scanner input = new Scanner(new FileInputStream(fileToRead));
-
-                int line = 0;
-                String dump;
-
-                while (input.hasNextLine()) {
-                    if (line == 0) {
-                        dump = input.nextLine();
-                        line++;
-                    }
-
-                    String[] lineData = input.nextLine().trim().split(",");
-                    int tripId = lineData[0].trim();
-                    tripIds.add(tripId);
-                    line++;
-                }
-                    input.close();
-                } catch(IOException e){
-                    System.err.println("File not found");
-                }
-                return tripIds;
-            }
-
-        public ArrayList<Integer> getStopId(String fileToRead){
-            ArrayList<Integer> stopIds = new ArrayList<>();
-            try{
-                Scanner readInput = new Scanner(new FileInputSTream(fileToRead));
-
-                int line = 0;
-                String dump;
-
-                while (readInput.hasNextLine()){
-                    if(line == 0){
-                        dump = input.nextLine();
-                        line ++;
-                    }
-
-                    String[] lineData = input.nextLine().trim().split(",");
-                    int stopId = lineData[3].trim();
-                    stopIds.add(stopId);
-                    line++;
-                }
-                    readInput.close();
-                } catch(IOException e){
-                    System.err.println("File not found");
-                }
-                return stopIds;
-            }
 
             /**
              * Unit tests the {@code DijkstraSP} data type.
@@ -270,11 +220,10 @@ public class shortestRoutePath {
                 }
             }
 
-        }
+
+    public HashMap<String,ArrayList<Trip>> busStopMap = new HashMap<String,ArrayList<Trip>>();
 
         public static void manageRequest() {
-
-            public HashMap<String,ArrayList<Trip>> busStopMap = new HashMap<String,ArrayList<Trip>>();
 
             //User enters first bus stop number
             JPanel panel1 = new JPanel();
@@ -309,19 +258,21 @@ public class shortestRoutePath {
                     JOptionPane.showMessageDialog(null, "The bus stop number is invalid, please re-enter a valid bus stop number");
                 }
 
-                shortestRoutePath<String,String> s = new shortestRoutePath<String, String>();
+                shortestRoutePath<String, String> s = new shortestRoutePath<String,String>();
+                createHashMap("stop_times.txt", s);
 
                 Dijkstra( , );
 
                 try{
-                    String result = Dijkstra( , );
+                    String result = createStringForBusStopsEnRoute(key, s);
 
                     if(result == null){
                         JOptionPane.showMessageDialog(null, "There is no route between the chosen two bus stops");
                     }
                     else{
-                        JOptionPane.showMessageDialog(null, "Routes en route from the first stop to the second: FILL and the shortest distance is:");
+                        JOptionPane.showMessageDialog(null, "Bus Stop " + key + "\n" + result);
                     }
+                    // "Routes en route from the first stop to the second: FILL and the shortest distance is:"
                 }
         }
     }
@@ -425,7 +376,7 @@ String[] lineData = input.nextLine().trim().split(",");
 
         private double getShortestDistance(int k){
             boolean[] isShortest = new boolean[distanceTo.length];
-            
+
             isShortest[k] = true;
 
             while(true){
@@ -454,5 +405,7 @@ String[] lineData = input.nextLine().trim().split(",");
             return distanceTo.length;
         }
         //Total cost of transfers is getShortestDistance output
-    
+
+    }
+
     }
