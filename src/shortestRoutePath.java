@@ -16,8 +16,8 @@ public class shortestRoutePath {
 
     public class Dijkstra {
 
-        private double[] distanceTo;          // distTo[v] = distance  of shortest s->v path
-        private DirectedEdge[] edgeTo;    // edgeTo[v] = last edge on shortest s->v path
+        private double[] distanceTo;          // distanceTo[v] = distance  of shortest s->v path
+        private DirectedEdge[] edgeTo;        // edgeTo[v] = last edge on shortest s->v path
         private IndexMinPQ<Double> priorityQueue; //priority queue of vertices
         public int infinity = Integer.MAX_VALUE;
 
