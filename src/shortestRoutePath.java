@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 import java.util.*;
 
-public class shortestRoutePath {
+public class shortestRoutePath <Key extends Comparable <Key>,Value>{
 
     /**
      * This is a skeleton file to find the shortest route path, display the route and
@@ -220,7 +220,7 @@ public class shortestRoutePath {
             }
         }
     }
-master
+
         public static void manageRequest() {
 
             public HashMap<String,ArrayList<Trip>> busStopMap = new HashMap<String,ArrayList<Trip>>();
