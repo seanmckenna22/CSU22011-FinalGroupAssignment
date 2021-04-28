@@ -14,7 +14,7 @@ public class shortestRoutePath {
      */
 
 
-        final static int INF = 99999, V = 4;
+       // final static int INF = 99999, V = 4;
 
     public class Dijkstra <Key extends Comparable <Key>,Value> {
 
