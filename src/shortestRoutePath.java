@@ -272,7 +272,7 @@ public class shortestRoutePath {
 
         }
 
-        public static void manageRequest(String key) {
+        public static void manageRequest() {
 
             public HashMap<String,ArrayList<Trip>> busStopMap = new HashMap<String,ArrayList<Trip>>();
 
