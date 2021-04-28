@@ -31,7 +31,7 @@ public class Interface {
         }
         else if(result==2)
         {
-            panel2.add(new JLabel("Return Shortest Path Between Stops"));
+            shortestRoutePath.manageRequest();
         }
 
         int result2 = JOptionPane.showOptionDialog(null, panel2, "Vancouver Bus Management System",
