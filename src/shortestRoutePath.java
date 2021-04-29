@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 import java.util.*;
 
-public class shortestRoutePath <Key extends Comparable <Key>,Value>{
+public class shortestRoutePath {
 
     /**
      * This is a skeleton file to find the shortest route path, display the route and
@@ -13,15 +13,14 @@ public class shortestRoutePath <Key extends Comparable <Key>,Value>{
      * This will use Dijkstra Implementation
      */
 
+    public Dijkstra {
 
-       // final static int INF = 99999, V = 4;
-
-    public class Dijkstra {
-
-        private double[] distanceTo;          // distanceTo[v] = distance  of shortest s->v path
-        private DirectedEdge[] edgeTo;        // edgeTo[v] = last edge on shortest s->v path
-        private IndexMinPQ<Double> priorityQueue; //priority queue of vertices
-        public int infinity = Integer.MAX_VALUE;
+        public double[] distanceTo;          // distanceTo[v] = distance  of shortest s->v path
+        public Edge[] edgeTo;        // edgeTo[v] = last edge on shortest s->v path
+        public double infinity = Double.POSITIVE_INFINITY;
+        public double max = Double.MAX_VALUE;
+        public String shortestPath;
+        public boolean[] visited;
 
         /**
          * Computes a shortest-paths tree from the source vertex {@code s} to every other
@@ -32,49 +31,47 @@ public class shortestRoutePath <Key extends Comparable <Key>,Value>{
          * @throws IllegalArgumentException if an edge weight is negative
          * @throws IllegalArgumentException unless {@code 0 <= s < V}
          */
-        public Dijkstra(EdgeWeightedDigraph G, int s) {
+        public Dijkstra(Graph G, int s, int dest) {
 
-            for (DirectedEdge e : G.edges()) {
-                if (e.weight() < 0)
-                    throw new IllegalArgumentException("edge " + e + " has negative weight");
+            distanceTo = new double[graph.numberOfStops];
+            edgeTo = new Edge[graph.numberOfStops];
+            visited = new boolean[graph.numberOfStops];
+
+            for (int v = 0; v < distanceTo.length; v++) {
+                distanceTo[v] = infinity;
+                visited[v] = false;
             }
-
-            distanceTo = new double[G.V()];
-            edgeTo = new DirectedEdge[G.V()];
-
-            validateVertex(s);
-
-            for (int v = 0; v < G.V(); v++)
-                distanceTo[v] = Double.POSITIVE_INFINITY;
             distanceTo[s] = 0.0;
 
             // relax vertices in order of distance from s
-            priorityQueue = new IndexMinPQ<Double>(G.V());
-            priorityQueue.insert(s, distanceTo[s]);
+           // priorityQueue = new IndexMinPQ<Double>(G.V());
+            //priorityQueue.insert(s, distanceTo[s]);
 
-            while (!priorityQueue.isEmpty()) {
-                int v = priorityQueue.delMin();
-                for (DirectedEdge e : G.adj(v))
-                    relax(e);
+            for (int i = 0; i < graph.numberOfStops - 1; i++) {
+                int j = minumumDistance(distanceTo, visited);
+
+                if(j < 0)
+                    continue;
+
+                visited[j] = true;
+
+                for(Edge e:graph.adjacent.get(j));
             }
 
+            shortestPath = getShortestPath(s, dest);
             // check optimality conditions
-            assert check(G, s);
+           // assert check(G, s);
         }
 
-        // relax edge e and update priorityQueue if changed
-        private void relax(DirectedEdge e) {
+        // relax edge e
+        private void relax(Edge e) {
             int v = e.from();
             int w = e.to();
 
             if (distanceTo[w] > (distanceTo[v] + e.weight())) {
                 distanceTo[w] = distanceTo[v] + e.weight();
                 edgeTo[w] = e;
-                if (priorityQueue.contains(w)) {
-                    priorityQueue.decreaseKey(w, distoTo[w]);
-                } else {
-                    priorityQueue.insert(w, distTo[w]);
-                }
+
             }
         }
 
@@ -86,9 +83,21 @@ public class shortestRoutePath <Key extends Comparable <Key>,Value>{
          * {@code Double.POSITIVE_INFINITY} if no such path
          * @throws IllegalArgumentException unless {@code 0 <= v < V}
          */
-        public double distanceTo(int v) {
-            validateVertex(v);
-            return distanceTo[v];
+        public double minumumDistance(double [] distanceTo, boolean [] visited) {
+
+            double minimum = max;
+            int number = -1;
+
+            for (int i = 0; i < visited.length; i++) {
+                if ((distanceTo[i] <= minimum) && !visited[i]) {
+                    minimum = distanceTo[i];
+                    number = i;
+                }
+            }
+            return number;
+
+            //validateVertex(v);
+            //return distanceTo[v];
         }
 
         /**
@@ -99,10 +108,10 @@ public class shortestRoutePath <Key extends Comparable <Key>,Value>{
          * {@code s} to vertex {@code v}; {@code false} otherwise
          * @throws IllegalArgumentException unless {@code 0 <= v < V}
          */
-        public boolean hasPathTo(int v) {
-            validateVertex(v);
-            return distanceTo[v] < Double.POSITIVE_INFINITY;
-        }
+        //public boolean hasPathTo(int v) {
+          //  validateVertex(v);
+            //return distanceTo[v] < Double.POSITIVE_INFINITY;
+        //}
 
         /**
          * Returns a shortest path from the source vertex {@code s} to vertex {@code v}.
@@ -112,18 +121,25 @@ public class shortestRoutePath <Key extends Comparable <Key>,Value>{
          * as an iterable of edges, and {@code null} if no such path
          * @throws IllegalArgumentException unless {@code 0 <= v < V}
          */
-        public Iterable<DirectedEdge> pathTo(int v) {
-            validateVertex(v);
-            if (!hasPathTo(v)) {
-                return null;
+        public String getShortestPath(int busStop1, int busStop2) {
+
+            Stack<Integer> busStops = new Stack<Integer>();
+            busStops.push(busStop2;
+
+            while(true){
+
+                int temporary = edgeTo[stop2].v;
+                busStops.push(temporary);
+                if(temporary == busStop1)
+                    break;
+            }
+            shortestPath = ("The Shortest Path from Bus Stop" + busStop1 + " to " + busStop2 + " is: ");
+
+            while(!busStops.isEmpty()){
+                shortestPath += (busStops.pop() + "\n");
             }
 
-            Stack<DirectedEdge> path = new Stack<DirectedEdge>();
-
-            for (DirectedEdge e = edgeTo[v]; e != null; e = edgeTo[e.from()]) {
-                path.push(e);
-            }
-            return path;
+            return shortestPath;
         }
 
 
@@ -181,7 +197,7 @@ public class shortestRoutePath <Key extends Comparable <Key>,Value>{
             }
             return true;
         }
-
+/*
         // throw an IllegalArgumentException unless {@code 0 <= v < V}
         private void validateVertex(int v) {
             int V = distanceTo.length;
@@ -196,6 +212,7 @@ public class shortestRoutePath <Key extends Comparable <Key>,Value>{
          *
          * @param args the command-line arguments
          */
+        /*
         public static void main(String[] args) {
 
             In in = new In(args[0]);
@@ -219,11 +236,14 @@ public class shortestRoutePath <Key extends Comparable <Key>,Value>{
                 }
             }
         }
-    }
+    }*/
 
-        public static void manageRequest() {
+        public static void manageRequest(){
 
-            public HashMap<String,ArrayList<Trip>> busStopMap = new HashMap<String,ArrayList<Trip>>();
+            String file1 = "stop_times.txt";
+            String file2 = "transfers.txt";
+            String file3 = "stops.txt";
+
 
             //User enters first bus stop number
             JPanel panel1 = new JPanel();
@@ -233,7 +253,7 @@ public class shortestRoutePath <Key extends Comparable <Key>,Value>{
 
             Object[] option1 = {"Enter"};
 
-            int result1 = JOptionPane.showOptionDialog(null, panel1, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+            int busStop1 = JOptionPane.showOptionDialog(null, panel1, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                     null, option1, null);
 
             //User enters second bus stop number
@@ -244,39 +264,17 @@ public class shortestRoutePath <Key extends Comparable <Key>,Value>{
 
             Object[] option2 = {"Enter"};
 
-            int result2 = JOptionPane.showOptionDialog(null, panel2, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+            int busStop2 = JOptionPane.showOptionDialog(null, panel2, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, option2, null);
 
-            if(result1 == 0){
+            Graph graph = new Graph(file1, file2, file3);
+            Dijkstra path = new Dijkstra(graph, busStop1, busStop2);
 
-                String key1 = textField1.getText();
-
-                String keyWithoutColon1 = key.replaceAll(":", "");
-                int keyAsInteger = Integer.parseInt(keyWithoutColon1);
-
-                if(key1 == null){
-                    JOptionPane.showMessageDialog(null, "The bus stop number is invalid, please re-enter a valid bus stop number");
-                }
-
-                shortestRoutePath<String, String> s = new shortestRoutePath<String,String>();
-                createHashMap("stop_times.txt", s);
-
-               // Dijkstra( , );
-
-                try{
-                    String result = createStringForBusStopsEnRoute(key, s);
-
-                    if(result == null){
-                        JOptionPane.showMessageDialog(null, "There is no route between the chosen two bus stops");
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(null, "Bus Stop " + key + "\n" + result);
-                    }
-                    // "Routes en route from the first stop to the second: FILL and the shortest distance is:"
-                }
+            System.out.pringln(path.shortestPath);
+            System.out.println(path.distanceTo);
         }
     }
-
+/*
     public static void createHashMap(String fileToRead, shortestRoutePath<String,String> st) {
         try {
             Scanner input = new Scanner(new FileInputStream(fileToRead));
@@ -342,13 +340,13 @@ public class shortestRoutePath <Key extends Comparable <Key>,Value>{
 
             results += sortedBusStops.get(i).busStop +
                     " Stop Id: "  + busStopNumber.stopId +
-                    " Distance Travelled: "  +  busStopNumber.distanceTravelled + "\n";
+                    " Cost : "  +  busStopNumber.distanceTravelled + "\n";
 
         }
         return results;
 
     }
-        
+   */
         /*
 
 String[] lineData = input.nextLine().trim().split(",");
@@ -373,7 +371,7 @@ String[] lineData = input.nextLine().trim().split(",");
 
             }
             */
-
+/*
         private double getShortestDistance(int k){
             boolean[] isShortest = new boolean[distanceTo.length];
 
@@ -405,6 +403,6 @@ String[] lineData = input.nextLine().trim().split(",");
             return distanceTo.length;
         }
         //Total cost of transfers is getShortestDistance output
-
+*/
     }
 
