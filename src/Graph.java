@@ -1,8 +1,13 @@
+import java.util.Scanner;
+import java.util.*;
+import java.io.File;
+import java.io.*;
+
 public class Graph {
 
     public int numberOfStops;
     public double weight;
-    public static ArrayList<Stop> busStops;
+    public static ArrayList<BusStop> busStops;
     public static ArrayList<ArrayList<Edge>> adjacent;
 
 
@@ -33,7 +38,7 @@ public class Graph {
             while (scan.hasNext()) {
 
                 if (scan.hasNextInt()) {
-                    busStops.add(new Stop(scan.nextInt()));
+                    busStops.add(new BusStop(scan.nextInt()));
                     scan.nextLine();
                 }
             }
@@ -135,11 +140,11 @@ public class Graph {
         }
     }
 
-    public static int findStop(int busStop) {
+    public static int findStop(int busStopID) {
 
         for (int i = 0; i < busStops.size(); i++) {
 
-            if (busStops.get(i).busStop == busStop) {
+            if (busStops.get(i).busStopID == busStopID) {
                 return i;
             }
         }
