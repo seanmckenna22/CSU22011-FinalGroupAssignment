@@ -76,7 +76,6 @@ public class shortestRoutePath {
         /**
          * Returns the length of a shortest path from the source vertex {@code s} to vertex {@code v}.
          *
-         * @param v the destination vertex
          * @return the length of a shortest path from the source vertex {@code s} to vertex {@code v};
          * {@code Double.POSITIVE_INFINITY} if no such path
          * @throws IllegalArgumentException unless {@code 0 <= v < V}
@@ -101,7 +100,6 @@ public class shortestRoutePath {
         /**
          * Returns true if there is a path from the source vertex {@code s} to vertex {@code v}.
          *
-         * @param v the destination vertex
          * @return {@code true} if there is a path from the source vertex
          * {@code s} to vertex {@code v}; {@code false} otherwise
          * @throws IllegalArgumentException unless {@code 0 <= v < V}
@@ -114,7 +112,6 @@ public class shortestRoutePath {
         /**
          * Returns a shortest path from the source vertex {@code s} to vertex {@code v}.
          *
-         * @param v the destination vertex
          * @return a shortest path from the source vertex {@code s} to vertex {@code v}
          * as an iterable of edges, and {@code null} if no such path
          * @throws IllegalArgumentException unless {@code 0 <= v < V}
@@ -142,6 +139,9 @@ public class shortestRoutePath {
 
         public static void manageRequest(){
 
+            int busStop1 = 0;
+            int busStop2 = 0;
+
             String file1 = "stop_times.txt";
             String file2 = "transfers.txt";
             String file3 = "stops.txt";
@@ -154,8 +154,12 @@ public class shortestRoutePath {
 
             Object[] option1 = {"Enter"};
 
-            int busStop1 = JOptionPane.showOptionDialog(null, panel1, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+            int result1 = JOptionPane.showOptionDialog(null, panel1, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                     null, option1, null);
+
+            if(result1 == 0){
+                busStop1 = Integer.parseInt(textField1.getText());
+            }
 
             //User enters second bus stop number
             JPanel panel2 = new JPanel();
@@ -165,13 +169,18 @@ public class shortestRoutePath {
 
             Object[] option2 = {"Enter"};
 
-            int busStop2 = JOptionPane.showOptionDialog(null, panel2, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, option2, null);
+            int result2 = JOptionPane.showOptionDialog(null, panel2, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                    null, option2, null);
 
-            Graph graph = new Graph(file1, file2, file3);
-            shortestRoutePath path = new shortestRoutePath(graph, busStop1, busStop2);
+            if(result2 == 0){
+                busStop2 = Integer.parseInt(textField2.getText());
+            }
 
-            System.out.println(path.shortestPath);
-            System.out.println(path.distanceTo);
+            Graph G = new Graph(file1, file2, file3);
+            shortestRoutePath path = new shortestRoutePath(G, busStop1, busStop2);
+
+            JOptionPane.showMessageDialog(null, path.shortestPath + "\n" + path.distanceTo);
         }
-    }
+
+}
+
