@@ -1,7 +1,4 @@
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
 import javax.swing.JOptionPane;
 import java.util.*;
 
@@ -13,7 +10,7 @@ public class shortestRoutePath {
      * This will use Dijkstra Implementation
      */
     public double[] distanceTo;          // distanceTo[v] = distance  of shortest s->v path
-    public Edge[] edgeTo;        // edgeTo[v] = last edge on shortest s->v path
+    public Edge[] edgeTo;                // edgeTo[v] = last edge on shortest s->v path
     public double infinity = Double.POSITIVE_INFINITY;
     public double max = Double.MAX_VALUE;
     public String shortestPath;
@@ -23,7 +20,7 @@ public class shortestRoutePath {
          * Computes a shortest-paths tree from the source vertex {@code s} to every other
          * vertex in the edge-weighted digraph {@code G}.
          *
-         * @param G the edge-weighted digraph
+         * @param G the graph
          * @param s the source vertex
          * @throws IllegalArgumentException if an edge weight is negative
          * @throws IllegalArgumentException unless {@code 0 <= s < V}
@@ -40,10 +37,6 @@ public class shortestRoutePath {
             }
             distanceTo[s] = 0.0;
 
-            // relax vertices in order of distance from s
-           // priorityQueue = new IndexMinPQ<Double>(G.V());
-            //priorityQueue.insert(s, distanceTo[s]);
-
             for (int i = 0; i < G.numberOfStops - 1; i++) {
                 int j = minimumDistance(distanceTo, visited);
 
@@ -58,7 +51,7 @@ public class shortestRoutePath {
 
             shortestPath = getShortestPath(s, dest);
             // check optimality conditions
-           // assert check(G, s);
+            // assert check(G, s);
         }
 
         // relax edge e
@@ -76,7 +69,6 @@ public class shortestRoutePath {
         /**
          * Returns the length of a shortest path from the source vertex {@code s} to vertex {@code v}.
          *
-         * @param v the destination vertex
          * @return the length of a shortest path from the source vertex {@code s} to vertex {@code v};
          * {@code Double.POSITIVE_INFINITY} if no such path
          * @throws IllegalArgumentException unless {@code 0 <= v < V}
@@ -101,7 +93,6 @@ public class shortestRoutePath {
         /**
          * Returns true if there is a path from the source vertex {@code s} to vertex {@code v}.
          *
-         * @param v the destination vertex
          * @return {@code true} if there is a path from the source vertex
          * {@code s} to vertex {@code v}; {@code false} otherwise
          * @throws IllegalArgumentException unless {@code 0 <= v < V}
@@ -114,7 +105,6 @@ public class shortestRoutePath {
         /**
          * Returns a shortest path from the source vertex {@code s} to vertex {@code v}.
          *
-         * @param v the destination vertex
          * @return a shortest path from the source vertex {@code s} to vertex {@code v}
          * as an iterable of edges, and {@code null} if no such path
          * @throws IllegalArgumentException unless {@code 0 <= v < V}
@@ -142,6 +132,9 @@ public class shortestRoutePath {
 
         public static void manageRequest(){
 
+            int busStop1 = 0;
+            int busStop2 = 0;
+
             String file1 = "stop_times.txt";
             String file2 = "transfers.txt";
             String file3 = "stops.txt";
@@ -154,8 +147,12 @@ public class shortestRoutePath {
 
             Object[] option1 = {"Enter"};
 
-            int busStop1 = JOptionPane.showOptionDialog(null, panel1, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+            int result1 = JOptionPane.showOptionDialog(null, panel1, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                     null, option1, null);
+
+            if(result1 == 0){
+                busStop1 = Integer.parseInt(textField1.getText());
+            }
 
             //User enters second bus stop number
             JPanel panel2 = new JPanel();
@@ -165,13 +162,17 @@ public class shortestRoutePath {
 
             Object[] option2 = {"Enter"};
 
-            int busStop2 = JOptionPane.showOptionDialog(null, panel2, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+            int result2 = JOptionPane.showOptionDialog(null, panel2, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, option2, null);
 
-            Graph graph = new Graph(file1, file2, file3);
-            shortestRoutePath path = new shortestRoutePath(graph, busStop1, busStop2);
+            if(result2 == 0){
+                busStop2 = Integer.parseInt(textField2.getText());
+            }
 
-            System.out.println(path.shortestPath);
-            System.out.println(path.distanceTo);
+            Graph G = new Graph(file1, file2, file3);
+            shortestRoutePath path = new shortestRoutePath(G, busStop1, busStop2);
+
+            JOptionPane.showMessageDialog(null, path.shortestPath + "\n" + path.distanceTo);
         }
+
     }
