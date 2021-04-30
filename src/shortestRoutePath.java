@@ -61,7 +61,7 @@ public class shortestRoutePath {
 
         // relax vertices in order of distance from s
         // priorityQueue = new IndexMinPQ<Double>(G.V());
-        //priorityQueue.insert(s, distanceTo[s]);
+        // priorityQueue.insert(s, distanceTo[s]);
 
         while (count < distanceTo.length) {
 
@@ -170,7 +170,7 @@ public class shortestRoutePath {
 
             if (transferType == 0) {
                 adjacencyList[source][destination] = cost;
-            } else {
+            } else if (transferType == 2){
                 minimumTime = scanner2.nextDouble();
                 adjacencyList[source][destination] = minimumTime / HUNDRED;
             }
