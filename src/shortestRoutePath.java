@@ -221,6 +221,13 @@ public class shortestRoutePath {
 
         shortestRoutePath path = new shortestRoutePath(file1, file2);
 
+        try {
+            path.adjacencyList(file1, file2);
+        }
+        catch(FileNotFoundException exception){
+            exception.printStackTrace();
+        }
+
         JOptionPane.showMessageDialog(null, path.getShortestPath(busStop1, busStop2));
 
     }
