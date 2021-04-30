@@ -40,7 +40,7 @@ public class shortestRoutePath {
      */
     public String shortestRoutePath(int source, int destination) {
 
-        String shortestPath = "Shortest Path is ";
+        String shortestPath = "";
         String noPath = "No path exists here";
 
         if (source == destination) {
@@ -78,7 +78,7 @@ public class shortestRoutePath {
             return noPath;
         }
 
-        while (source != destination) {
+        while (destination != source) {
             shortestPath = ", " + edgeTo[destination] + shortestPath;
             destination = edgeTo[destination];
         }
@@ -223,7 +223,7 @@ public class shortestRoutePath {
             exception.printStackTrace();
         }
 
-        String output = path.shortestRoutePath(busStop1, busStop2);
+        String output = "Cost is " + path.shortestRoutePath(busStop1, busStop2);
         JOptionPane.showMessageDialog(null, output);
 
     }
