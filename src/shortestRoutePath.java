@@ -23,10 +23,10 @@ public class shortestRoutePath {
     double maximum = Double.MAX_VALUE;
     public final double HUNDRED = 100;
 
-    public shortestRoutePath(String file1, String file2) {
+    public shortestRoutePath() {
 
         try {
-            adjacencyList(file1, file2);
+            adjacencyList();
         } catch (FileNotFoundException exception) {
             exception.printStackTrace();
         }
@@ -106,10 +106,10 @@ public class shortestRoutePath {
      * as an iterable of edges, and {@code null} if no such path
      * @throws IllegalArgumentException unless {@code 0 <= v < V}
      */
-    public void adjacencyList(String file1, String file2) throws FileNotFoundException {
+    public void adjacencyList() throws FileNotFoundException {
 
-        File stopTimes = new File(file1);
-        File transfers = new File(file2);
+        File stopTimes = new File("stop_times.txt");
+        File transfers = new File("transfers.txt");
 
         Scanner scanner1 = new Scanner(stopTimes);
         Scanner scanner2 = null;
@@ -185,10 +185,6 @@ public class shortestRoutePath {
         int busStop1 = 0;
         int busStop2 = 0;
 
-        String file1 = "stop_times.txt";
-        String file2 = "transfers.txt";
-        String file3 = "stops.txt";
-
         //User enters first bus stop number
         JPanel panel1 = new JPanel();
         panel1.add(new JLabel("Please Enter the First Bus Stop Number:"));
@@ -219,10 +215,10 @@ public class shortestRoutePath {
             busStop2 = Integer.parseInt(textField2.getText());
         }
 
-        shortestRoutePath path = new shortestRoutePath(file1, file2);
+        shortestRoutePath path = new shortestRoutePath();
 
         try {
-            path.adjacencyList(file1, file2);
+            path.adjacencyList();
         }
         catch(FileNotFoundException exception){
             exception.printStackTrace();
