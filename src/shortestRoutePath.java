@@ -47,7 +47,7 @@ public class shortestRoutePath {
             return adjacencyList[source][source] + " through the following path " + source;
         }
 
-        for (int i = 0; i < visited.length; i++) {
+        for (int i = 0; i < distanceTo.length; i++) {
             if (i != source) {
                 distanceTo[i] = infinity;
             }
@@ -92,7 +92,7 @@ public class shortestRoutePath {
     // relax edge
     private void relax(double[] distanceTo, int[] edgeTo, int i, int currentStop) {
 
-        if (distanceTo[i] > (distanceTo[currentStop] + adjacencyList[currentStop][i])) {
+        if (distanceTo[i] > distanceTo[currentStop] + adjacencyList[currentStop][i]) {
             distanceTo[i] = distanceTo[currentStop] + adjacencyList[currentStop][i];
             edgeTo[i] = currentStop;
         }
@@ -140,8 +140,8 @@ public class shortestRoutePath {
             lastRoute = currentRoute;
             currentRoute = scanner2.nextInt();
 
-            scanner2.nextInt();
-            scanner2.nextInt();
+            scanner2.next();
+            scanner2.next();
 
             source = destination;
             destination = scanner2.nextInt();
@@ -223,7 +223,8 @@ public class shortestRoutePath {
             exception.printStackTrace();
         }
 
-        JOptionPane.showMessageDialog(null, path.shortestRoutePath(busStop1, busStop2));
+        String output = path.shortestRoutePath(busStop1, busStop2);
+        JOptionPane.showMessageDialog(null, output);
 
     }
 
