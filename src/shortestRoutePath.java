@@ -1,5 +1,4 @@
 import javax.swing.*;
-
 import java.io.*;
 import java.io.IOException;
 
@@ -23,7 +22,7 @@ public class shortestRoutePath {
     double maximum = Double.MAX_VALUE;
     public final double HUNDRED = 100;
 
-    public shortestRoutePath() {
+    shortestRoutePath() {
 
         try {
             adjacencyList();
@@ -39,7 +38,7 @@ public class shortestRoutePath {
      * @throws IllegalArgumentException if an edge weight is negative
      * @throws IllegalArgumentException unless {@code 0 <= s < V}
      */
-    public String getShortestPath(int source, int destination) {
+    public String shortestRoutePath(int source, int destination) {
 
         String shortestPath = "Shortest Path is ";
         String noPath = "No path exists here";
@@ -224,7 +223,7 @@ public class shortestRoutePath {
             exception.printStackTrace();
         }
 
-        JOptionPane.showMessageDialog(null, path.getShortestPath(busStop1, busStop2));
+        JOptionPane.showMessageDialog(null, path.shortestRoutePath(busStop1, busStop2));
 
     }
 
