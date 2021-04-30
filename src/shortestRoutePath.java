@@ -1,6 +1,8 @@
 import javax.swing.*;
+
 import java.io.*;
 import java.io.IOException;
+
 import javax.swing.JOptionPane;
 import java.util.Scanner;
 
@@ -50,6 +52,9 @@ public class shortestRoutePath {
             if (i != source) {
                 distanceTo[i] = infinity;
             }
+
+            shortestPath = getShortestPath(s, dest);
+
         }
         int currentStop = source;
         int count = 0;
@@ -218,6 +223,7 @@ public class shortestRoutePath {
         shortestRoutePath path = new shortestRoutePath(file1, file2);
 
         JOptionPane.showMessageDialog(null, path.getShortestPath(busStop1, busStop2));
+
     }
 
 }
