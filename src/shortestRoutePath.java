@@ -1,6 +1,10 @@
 import javax.swing.*;
+
+import java.io.*;
+import java.io.IOException;
+
 import javax.swing.JOptionPane;
-import java.util.*;
+import java.util.Scanner;
 
 public class shortestRoutePath {
 
@@ -9,170 +13,218 @@ public class shortestRoutePath {
      * the associated costs of the route
      * This will use Dijkstra Implementation
      */
-    public double[] distanceTo;          // distanceTo[v] = distance  of shortest s->v path
-    public Edge[] edgeTo;                // edgeTo[v] = last edge on shortest s->v path
-    public double infinity = Double.POSITIVE_INFINITY;
-    public double max = Double.MAX_VALUE;
-    public String shortestPath;
-    public boolean[] visited;
+    public final int STOPS = 12479;
+    public double adjacencyList[][] = new double[STOPS][STOPS];
 
-        /**
-         * Computes a shortest-paths tree from the source vertex {@code s} to every other
-         * vertex in the edge-weighted digraph {@code G}.
-         *
-         * @param G the graph
-         * @param s the source vertex
-         * @throws IllegalArgumentException if an edge weight is negative
-         * @throws IllegalArgumentException unless {@code 0 <= s < V}
-         */
-        public shortestRoutePath(Graph G, int s, int dest) {
+    double distanceTo[] = new double[adjacencyList.length];
+    int edgeTo[] = new int[adjacencyList.length];
+    int visited[] = new int[adjacencyList.length];
+    double infinity = Double.POSITIVE_INFINITY;
+    double maximum = Double.MAX_VALUE;
+    public final double HUNDRED = 100;
 
-            this.distanceTo = new double[G.numberOfStops];
-            this.edgeTo = new Edge[G.numberOfStops];
-            this.visited = new boolean[G.numberOfStops];
+    public shortestRoutePath(String file1, String file2) {
 
-            for (int v = 0; v < distanceTo.length; v++) {
-                distanceTo[v] = infinity;
-                visited[v] = false;
-            }
-            distanceTo[s] = 0.0;
+        try {
+            adjacencyList(file1, file2);
+        } catch (FileNotFoundException exception) {
+            exception.printStackTrace();
+        }
+    }
 
-            for (int i = 0; i < G.numberOfStops - 1; i++) {
-                int j = minimumDistance(distanceTo, visited);
+    /**
+     * Computes a shortest-paths tree from the source vertex {@code s} to every other
+     * vertex in the edge-weighted digraph {@code G}.
+     *
+     * @throws IllegalArgumentException if an edge weight is negative
+     * @throws IllegalArgumentException unless {@code 0 <= s < V}
+     */
+    public String getShortestPath(int source, int destination) {
 
-                if(j < 0)
-                    continue;
+        String shortestPath = "Shortest Path is ";
+        String noPath = "No path exists here";
 
-                visited[j] = true;
+        if (source == destination) {
+            return adjacencyList[source][source] + " through the following path " + source;
+        }
 
-                for(Edge e : G.adjacent.get(j))
-                    relax(e);
+        for (int i = 0; i < visited.length; i++) {
+            if (i != source) {
+                distanceTo[i] = infinity;
             }
 
             shortestPath = getShortestPath(s, dest);
-            // check optimality conditions
-            // assert check(G, s);
+
         }
+        int currentStop = source;
+        int count = 0;
 
-        // relax edge e
-        private void relax(Edge e) {
-            int v = e.fromV;
-            int w = e.endV;
+        visited[source] = 1;
+        distanceTo[source] = 0;
 
-            if (distanceTo[w] > (distanceTo[v] + e.weight)) {
-                distanceTo[w] = distanceTo[v] + e.weight;
-                edgeTo[w] = e;
+        // relax vertices in order of distance from s
+        // priorityQueue = new IndexMinPQ<Double>(G.V());
+        //priorityQueue.insert(s, distanceTo[s]);
 
-            }
-        }
+        while (count < distanceTo.length) {
 
-        /**
-         * Returns the length of a shortest path from the source vertex {@code s} to vertex {@code v}.
-         *
-         * @return the length of a shortest path from the source vertex {@code s} to vertex {@code v};
-         * {@code Double.POSITIVE_INFINITY} if no such path
-         * @throws IllegalArgumentException unless {@code 0 <= v < V}
-         */
-        public int minimumDistance(double [] distanceTo, boolean [] visited) {
-
-            double minimum = max;
-            int number = -1;
-
-            for (int i = 0; i < visited.length; i++) {
-                if ((distanceTo[i] <= minimum) && !visited[i]) {
-                    minimum = distanceTo[i];
-                    number = i;
+            for (int i = 0; i < adjacencyList[currentStop].length; i++) {
+                if (visited[i] == 0 && !Double.isNaN(adjacencyList[currentStop][i])) {
+                    relax(distanceTo, edgeTo, i, currentStop);
                 }
             }
-            return number;
-
-            //validateVertex(v);
-            //return distanceTo[v];
+            count++;
         }
 
-        /**
-         * Returns true if there is a path from the source vertex {@code s} to vertex {@code v}.
-         *
-         * @return {@code true} if there is a path from the source vertex
-         * {@code s} to vertex {@code v}; {@code false} otherwise
-         * @throws IllegalArgumentException unless {@code 0 <= v < V}
-         */
-        //public boolean hasPathTo(int v) {
-          //  validateVertex(v);
-            //return distanceTo[v] < Double.POSITIVE_INFINITY;
-        //}
-
-        /**
-         * Returns a shortest path from the source vertex {@code s} to vertex {@code v}.
-         *
-         * @return a shortest path from the source vertex {@code s} to vertex {@code v}
-         * as an iterable of edges, and {@code null} if no such path
-         * @throws IllegalArgumentException unless {@code 0 <= v < V}
-         */
-        public String getShortestPath(int busStop1, int busStop2) {
-
-            Stack<Integer> busStops = new Stack<Integer>();
-            busStops.push(busStop2);
-
-            while(true){
-
-                int temporary = edgeTo[busStop2].fromV;
-                busStops.push(temporary);
-                if(temporary == busStop1)
-                    break;
-            }
-            shortestPath = ("The Shortest Path from Bus Stop" + busStop1 + " to " + busStop2 + " is: ");
-
-            while(!busStops.isEmpty()){
-                shortestPath += (busStops.pop() + "\n");
-            }
-
-            return shortestPath;
+        if (distanceTo[destination] == infinity) {
+            return noPath;
         }
 
-        public static void manageRequest(){
-
-            int busStop1 = 0;
-            int busStop2 = 0;
-
-            String file1 = "stop_times.txt";
-            String file2 = "transfers.txt";
-            String file3 = "stops.txt";
-
-            //User enters first bus stop number
-            JPanel panel1 = new JPanel();
-            panel1.add(new JLabel("Please Enter the First Bus Stop Number:"));
-            JTextField textField1 = new JTextField(50);
-            panel1.add(textField1);
-
-            Object[] option1 = {"Enter"};
-
-            int result1 = JOptionPane.showOptionDialog(null, panel1, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
-                    null, option1, null);
-
-            if(result1 == 0){
-                busStop1 = Integer.parseInt(textField1.getText());
-            }
-
-            //User enters second bus stop number
-            JPanel panel2 = new JPanel();
-            panel2.add(new JLabel("Please Enter the Second Bus Stop Number:"));
-            JTextField textField2 = new JTextField(50);
-            panel2.add(textField2);
-
-            Object[] option2 = {"Enter"};
-
-            int result2 = JOptionPane.showOptionDialog(null, panel2, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, option2, null);
-
-            if(result2 == 0){
-                busStop2 = Integer.parseInt(textField2.getText());
-            }
-
-            Graph G = new Graph(file1, file2, file3);
-            shortestRoutePath path = new shortestRoutePath(G, busStop1, busStop2);
-
-            JOptionPane.showMessageDialog(null, path.shortestPath + "\n" + path.distanceTo);
+        while (source != destination) {
+            shortestPath = ", " + edgeTo[destination] + shortestPath;
+            destination = edgeTo[destination];
         }
+
+        shortestPath = shortestPath + ", " + destination;
+
+        return distanceTo[destination] + " through the following path " + shortestPath;
 
     }
+
+    // relax edge
+    private void relax(double[] distanceTo, int[] edgeTo, int i, int currentStop) {
+
+        if (distanceTo[i] > (distanceTo[currentStop] + adjacencyList[currentStop][i])) {
+            distanceTo[i] = distanceTo[currentStop] + adjacencyList[currentStop][i];
+            edgeTo[i] = currentStop;
+        }
+    }
+
+    /**
+     * Returns a shortest path from the source vertex {@code s} to vertex {@code v}.
+     *
+     * @return a shortest path from the source vertex {@code s} to vertex {@code v}
+     * as an iterable of edges, and {@code null} if no such path
+     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     */
+    public void adjacencyList(String file1, String file2) throws FileNotFoundException {
+
+        File stopTimes = new File(file1);
+        File transfers = new File(file2);
+
+        Scanner scanner1 = new Scanner(stopTimes);
+        Scanner scanner2 = null;
+
+        double cost = 1;
+        String current;
+        int currentRoute = 0;
+        int lastRoute = 0;
+        int source = 0;
+        int destination = 0;
+        int transferType;
+        double minimumTime;
+
+        for (int u = 0; u < adjacencyList.length; u++) {
+            for (int v = 0; v < adjacencyList.length; v++) {
+                if (u != v) {
+                    adjacencyList[u][v] = maximum;
+                } else adjacencyList[u][v] = 0;
+            }
+        }
+
+        scanner1.nextLine();
+        while (scanner1.hasNextLine()) {
+            current = scanner1.nextLine();
+
+            scanner2 = new Scanner(current);
+            scanner2.useDelimiter(",");
+
+            lastRoute = currentRoute;
+            currentRoute = scanner2.nextInt();
+
+            scanner2.nextInt();
+            scanner2.nextInt();
+
+            source = destination;
+            destination = scanner2.nextInt();
+
+            if (lastRoute == currentRoute) {
+                adjacencyList[source][destination] = cost;
+            }
+            scanner2.close();
+        }
+        scanner1.close();
+
+        cost = 2;
+        scanner1 = new Scanner(transfers);
+        scanner1.nextLine();
+
+        while (scanner1.hasNextLine()) {
+            current = scanner1.nextLine();
+
+            scanner2 = new Scanner(current);
+            scanner2.useDelimiter(",");
+
+            source = scanner2.nextInt();
+            destination = scanner2.nextInt();
+
+            transferType = scanner2.nextInt();
+
+            if (transferType == 0) {
+                adjacencyList[source][destination] = cost;
+            } else {
+                minimumTime = scanner2.nextDouble();
+                adjacencyList[source][destination] = minimumTime / HUNDRED;
+            }
+            scanner2.close();
+        }
+        scanner1.close();
+    }
+
+    public static void manageRequest() {
+
+        int busStop1 = 0;
+        int busStop2 = 0;
+
+        String file1 = "stop_times.txt";
+        String file2 = "transfers.txt";
+        String file3 = "stops.txt";
+
+        //User enters first bus stop number
+        JPanel panel1 = new JPanel();
+        panel1.add(new JLabel("Please Enter the First Bus Stop Number:"));
+        JTextField textField1 = new JTextField(50);
+        panel1.add(textField1);
+
+        Object[] option1 = {"Enter"};
+
+        int result1 = JOptionPane.showOptionDialog(null, panel1, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, option1, null);
+
+        if (result1 == 0) {
+            busStop1 = Integer.parseInt(textField1.getText());
+        }
+
+        //User enters second bus stop number
+        JPanel panel2 = new JPanel();
+        panel2.add(new JLabel("Please Enter the Second Bus Stop Number:"));
+        JTextField textField2 = new JTextField(50);
+        panel2.add(textField2);
+
+        Object[] option2 = {"Enter"};
+
+        int result2 = JOptionPane.showOptionDialog(null, panel2, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, option2, null);
+
+        if (result2 == 0) {
+            busStop2 = Integer.parseInt(textField2.getText());
+        }
+
+        shortestRoutePath path = new shortestRoutePath(file1, file2);
+
+        JOptionPane.showMessageDialog(null, path.getShortestPath(busStop1, busStop2));
+
+    }
+
+}
+
