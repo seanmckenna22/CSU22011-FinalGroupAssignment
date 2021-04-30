@@ -53,8 +53,6 @@ public class shortestRoutePath {
                 distanceTo[i] = infinity;
             }
 
-            shortestPath = getShortestPath(s, dest);
-
         }
         int currentStop = source;
         int count = 0;
@@ -69,6 +67,7 @@ public class shortestRoutePath {
         while (count < distanceTo.length) {
 
             for (int i = 0; i < adjacencyList[currentStop].length; i++) {
+
                 if (visited[i] == 0 && !Double.isNaN(adjacencyList[currentStop][i])) {
                     relax(distanceTo, edgeTo, i, currentStop);
                 }
