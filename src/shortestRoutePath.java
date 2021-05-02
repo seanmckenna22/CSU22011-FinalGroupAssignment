@@ -55,7 +55,7 @@ public class shortestRoutePath {
         }
         int currentStop = source;
         int count = 0;
-
+        double shortest = maximum;
         visited[source] = 1;
         distanceTo[source] = 0;
 
@@ -69,6 +69,17 @@ public class shortestRoutePath {
 
                 if (visited[i] == 0 && !Double.isNaN(adjacencyList[currentStop][i])) {
                     relax(distanceTo, edgeTo, i, currentStop);
+                }
+            }
+
+            visited[currentStop] = 1;
+
+            for(int j = 0; j < distanceTo.length; j++)
+            {
+
+                if (visited[j] != 1 && shortest > distanceTo[j]) {
+                    currentStop = j;
+                    shortest = distanceTo[j];
                 }
             }
             count++;
