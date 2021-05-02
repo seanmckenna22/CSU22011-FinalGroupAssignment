@@ -15,11 +15,8 @@ public class shortestRoutePath {
     public final int STOPS = 12479;
     public double adjacencyList[][] = new double[STOPS][STOPS];
 
-    double distanceTo[] = new double[adjacencyList.length];
-    int edgeTo[] = new int[adjacencyList.length];
-    int visited[] = new int[adjacencyList.length];
     double infinity = Double.POSITIVE_INFINITY;
-    double maximum = Double.MAX_VALUE;
+    int maximum = Integer.MAX_VALUE;
     public final double HUNDRED = 100;
 
     shortestRoutePath() {
@@ -28,84 +25,6 @@ public class shortestRoutePath {
             adjacencyList();
         } catch (FileNotFoundException exception) {
             exception.printStackTrace();
-        }
-    }
-
-    /**
-     * Computes a shortest-paths tree from the source vertex {@code s} to every other
-     * vertex in the edge-weighted digraph {@code G}.
-     *
-     * @throws IllegalArgumentException if an edge weight is negative
-     * @throws IllegalArgumentException unless {@code 0 <= s < V}
-     */
-    public String shortestRoutePath(int source, int destination) {
-
-        String shortestPath = "";
-        String noPath = "No path exists here";
-
-        if (source == destination) {
-            return adjacencyList[source][source] + " through the following path " + source;
-        }
-
-        for (int i = 0; i < distanceTo.length; i++) {
-            if (i != source) {
-                distanceTo[i] = infinity;
-            }
-
-        }
-        int currentStop = source;
-        int count = 0;
-        double shortest = maximum;
-        visited[source] = 1;
-        distanceTo[source] = 0;
-
-        // relax vertices in order of distance from s
-        // priorityQueue = new IndexMinPQ<Double>(G.V());
-        // priorityQueue.insert(s, distanceTo[s]);
-
-        while (count < distanceTo.length) {
-
-            for (int i = 0; i < adjacencyList[currentStop].length; i++) {
-
-                if (visited[i] == 0 && !Double.isNaN(adjacencyList[currentStop][i])) {
-                    relax(distanceTo, edgeTo, i, currentStop);
-                }
-            }
-
-            visited[currentStop] = 1;
-
-            for(int j = 0; j < distanceTo.length; j++)
-            {
-
-                if (visited[j] != 1 && shortest > distanceTo[j]) {
-                    currentStop = j;
-                    shortest = distanceTo[j];
-                }
-            }
-            count++;
-        }
-
-        if (distanceTo[destination] == infinity) {
-            return noPath;
-        }
-
-        while (destination != source) {
-            shortestPath = ", " + edgeTo[destination] + shortestPath;
-            destination = edgeTo[destination];
-        }
-
-        shortestPath = shortestPath + ", " + destination;
-
-        return distanceTo[destination] + " through the following path " + shortestPath;
-
-    }
-
-    // relax edge
-    private void relax(double[] distanceTo, int[] edgeTo, int i, int currentStop) {
-
-        if (distanceTo[i] > distanceTo[currentStop] + adjacencyList[currentStop][i]) {
-            distanceTo[i] = distanceTo[currentStop] + adjacencyList[currentStop][i];
-            edgeTo[i] = currentStop;
         }
     }
 
@@ -137,7 +56,9 @@ public class shortestRoutePath {
             for (int v = 0; v < adjacencyList.length; v++) {
                 if (u != v) {
                     adjacencyList[u][v] = maximum;
-                } else adjacencyList[u][v] = 0;
+                } else{
+                    adjacencyList[u][v] = 0;
+                }
             }
         }
 
@@ -164,7 +85,6 @@ public class shortestRoutePath {
         }
         scanner1.close();
 
-        cost = 2;
         scanner1 = new Scanner(transfers);
         scanner1.nextLine();
 
@@ -180,7 +100,7 @@ public class shortestRoutePath {
             transferType = scanner2.nextInt();
 
             if (transferType == 0) {
-                adjacencyList[source][destination] = cost;
+                adjacencyList[source][destination] = 2;
             } else if (transferType == 2){
                 minimumTime = scanner2.nextDouble();
                 adjacencyList[source][destination] = minimumTime / HUNDRED;
@@ -188,6 +108,92 @@ public class shortestRoutePath {
             scanner2.close();
         }
         scanner1.close();
+    }
+
+    /**
+     * Computes a shortest-paths tree from the source vertex {@code s} to every other
+     * vertex in the edge-weighted digraph {@code G}.
+     *
+     * @throws IllegalArgumentException if an edge weight is negative
+     * @throws IllegalArgumentException unless {@code 0 <= s < V}
+     */
+    public String shortestRoutePath(int source, int destination) {
+
+        String shortestPath = "";
+        String noPath = "No path exists here";
+
+        double distanceTo[] = new double[adjacencyList.length];
+        int edgeTo[] = new int[adjacencyList.length];
+        int visited[] = new int[adjacencyList.length];
+
+        if (source == destination) {
+            return adjacencyList[source][source] + " through the following path " + source;
+        }
+
+        for (int i = 0; i < distanceTo.length; i++) {
+            if (i != source) {
+                distanceTo[i] = infinity;
+            }
+
+        }
+        int currentStop = source;
+        int count = 0;
+
+        visited[source] = 1;
+        distanceTo[source] = 0;
+
+        // relax vertices in order of distance from s
+        // priorityQueue = new IndexMinPQ<Double>(G.V());
+        // priorityQueue.insert(s, distanceTo[s]);
+
+        while (count < distanceTo.length) {
+
+            for (int i = 0; i < adjacencyList[currentStop].length; i++) {
+
+                if (visited[i] == 0 && !Double.isNaN(adjacencyList[currentStop][i])) {
+                    relax(distanceTo, edgeTo, i, currentStop);
+                }
+            }
+
+            visited[currentStop] = 1;
+            double shortest = maximum;
+
+            for(int j = 0; j < distanceTo.length; j++)
+            {
+
+                if (visited[j] != 1 && shortest > distanceTo[j]) {
+                    currentStop = j;
+                    shortest = distanceTo[j];
+                }
+            }
+            count++;
+        }
+
+        int i = source;
+        int j = destination;
+
+        if (distanceTo[destination] == infinity) {
+            return noPath;
+        }
+
+        while (j != i) {
+            shortestPath = "\n" + edgeTo[j] + shortestPath;
+            j = edgeTo[j];
+        }
+
+        shortestPath = shortestPath + "\n" + destination;
+
+        return distanceTo[destination] + " through the following path: " + shortestPath;
+
+    }
+
+    // relax edge
+    private void relax(double[] distanceTo, int[] edgeTo, int i, int currentStop) {
+
+        if (distanceTo[i] > distanceTo[currentStop] + adjacencyList[currentStop][i]) {
+            distanceTo[i] = distanceTo[currentStop] + adjacencyList[currentStop][i];
+            edgeTo[i] = currentStop;
+        }
     }
 
     public static void manageRequest() {
@@ -209,6 +215,10 @@ public class shortestRoutePath {
         if (result1 == 0) {
             busStop1 = Integer.parseInt(textField1.getText());
         }
+        else if(result1 != 0){
+            JOptionPane.showMessageDialog(null, "This is not a valid number. Please try again");
+            manageRequest();
+        }
 
         //User enters second bus stop number
         JPanel panel2 = new JPanel();
@@ -223,6 +233,10 @@ public class shortestRoutePath {
 
         if (result2 == 0) {
             busStop2 = Integer.parseInt(textField2.getText());
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "This is not a valid number. Please try again");
+            manageRequest();
         }
 
         shortestRoutePath path = new shortestRoutePath();
