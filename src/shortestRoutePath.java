@@ -202,7 +202,7 @@ public class shortestRoutePath {
         //User enters first bus stop number
         JPanel panel1 = new JPanel();
         panel1.add(new JLabel("Please Enter the First Bus Stop Number:"));
-        JTextField textField1 = new JTextField(50);
+        JTextField textField1 = new JTextField(25);
         panel1.add(textField1);
 
         Object[] option1 = {"Enter"};
@@ -222,7 +222,7 @@ public class shortestRoutePath {
         //User enters second bus stop number
         JPanel panel2 = new JPanel();
         panel2.add(new JLabel("Please Enter the Second Bus Stop Number:"));
-        JTextField textField2 = new JTextField(50);
+        JTextField textField2 = new JTextField(25);
         panel2.add(textField2);
 
         Object[] option2 = {"Enter"};
