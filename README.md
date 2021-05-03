@@ -7,3 +7,13 @@ Luke Gilmartin 19335059
 Will O'Callaghan 19334234
 
 In order to run the Bus Management System, run the interface program.
+
+Group Contributions:
+
+Sean Mc Kenna: Set Up Repository, Intiliased Interface and  implimented Bus Stop Search Classes
+Ciaran Mc Kay: Formatted Deisgn Doc, Implimented The Search Arrival Time Classes
+Will O' Callaghan: 
+Luke Gilmartin
+
+As a Group: Video Created, helped eachother with code throughout
+
