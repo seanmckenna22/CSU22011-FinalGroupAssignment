@@ -103,14 +103,22 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
      */
 
     public static void manageRequest(String key){
+
+        try{
+            Integer.parseInt(key);
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null,"Invalid input, you cannot enter text, it must be a valid time. Thank You");
+            return;
+        }
+
         String keyWithoutColon = key.replaceAll(":","");
         int keyAsInt = Integer.parseInt(keyWithoutColon);
 
         if(key == null || keyAsInt > 235959 || keyAsInt < 0){
             JOptionPane.showMessageDialog(null,"The time entered is invalid, it must fall " +
                     "between 0:00:00 and 23:59:59, thank you.");
+            return;
         }
-
         SearchArrivalTime<String,String> c = new SearchArrivalTime<String,String>();
         createHashMap("stop_times.txt",c);
     try {
@@ -125,6 +133,7 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
         }
         catch(Exception e){
         JOptionPane.showMessageDialog(null,"No valid input found, Please use the format H:MM:SS, thank you");
+        return;
 
         }
     }

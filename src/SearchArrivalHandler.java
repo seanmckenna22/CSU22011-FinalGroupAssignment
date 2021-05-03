@@ -7,9 +7,8 @@ import javax.swing.JTextField;
 public class SearchArrivalHandler {
 
     /**
-     * This skeleton file will search for an arrival time
-     * This will involve the implementation of a HashMap
-     * We also need to sort by Trip Id
+     * This java file handles the Search Arrival Time Request for JOPtion Pane.
+     * It calls on the search Arrival Time manage request method which then sorts the code
      */
 
     /**
