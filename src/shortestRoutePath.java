@@ -8,9 +8,9 @@ import java.util.Scanner;
 public class shortestRoutePath {
 
     /**
-     * This finds the shortest route path, display the route and
-     * the associated costs of the route
-     * This will use Dijkstra Implementation
+     * This finds the shortest route path. It displays the path taken and
+     * the associated costs of the route.
+     * This uses Dijkstra Implementation.
      */
     public final int STOPS = 12479;
     public double adjacencyList[][] = new double[STOPS][STOPS];
@@ -29,11 +29,8 @@ public class shortestRoutePath {
     }
 
     /**
-     * Returns a shortest path from the source vertex {@code s} to vertex {@code v}.
-     *
-     * @return a shortest path from the source vertex {@code s} to vertex {@code v}
-     * as an iterable of edges, and {@code null} if no such path
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * adjacencyList() creates an adjacency list that is used to hold the routes and
+     * cost/distance associated with each route.
      */
     public void adjacencyList() throws FileNotFoundException {
 
@@ -46,8 +43,8 @@ public class shortestRoutePath {
         double cost = 1;
         String current;
         int currentRoute = 0;
-        int lastRoute = 0;
-        int source = 0;
+        int lastRoute;
+        int source;
         int destination = 0;
         int transferType;
         double minimumTime;
@@ -56,7 +53,7 @@ public class shortestRoutePath {
             for (int v = 0; v < adjacencyList.length; v++) {
                 if (u != v) {
                     adjacencyList[u][v] = maximum;
-                } else{
+                } else {
                     adjacencyList[u][v] = 0;
                 }
             }
@@ -101,7 +98,7 @@ public class shortestRoutePath {
 
             if (transferType == 0) {
                 adjacencyList[source][destination] = 2;
-            } else if (transferType == 2){
+            } else if (transferType == 2) {
                 minimumTime = scanner2.nextDouble();
                 adjacencyList[source][destination] = minimumTime / HUNDRED;
             }
@@ -111,11 +108,8 @@ public class shortestRoutePath {
     }
 
     /**
-     * Computes a shortest-paths tree from the source vertex {@code s} to every other
-     * vertex in the edge-weighted digraph {@code G}.
-     *
-     * @throws IllegalArgumentException if an edge weight is negative
-     * @throws IllegalArgumentException unless {@code 0 <= s < V}
+     * Computes and returns the shortest-path  from the source vertex {@code source} to the
+     * destination {@code destination} in the adjacency list {@code adjacencylist[][]}.
      */
     public String shortestRoutePath(int source, int destination) {
 
@@ -142,10 +136,6 @@ public class shortestRoutePath {
         visited[source] = 1;
         distanceTo[source] = 0;
 
-        // relax vertices in order of distance from s
-        // priorityQueue = new IndexMinPQ<Double>(G.V());
-        // priorityQueue.insert(s, distanceTo[s]);
-
         while (count < distanceTo.length) {
 
             for (int i = 0; i < adjacencyList[currentStop].length; i++) {
@@ -158,8 +148,7 @@ public class shortestRoutePath {
             visited[currentStop] = 1;
             double shortest = maximum;
 
-            for(int j = 0; j < distanceTo.length; j++)
-            {
+            for (int j = 0; j < distanceTo.length; j++) {
 
                 if (visited[j] != 1 && shortest > distanceTo[j]) {
                     currentStop = j;
@@ -187,7 +176,9 @@ public class shortestRoutePath {
 
     }
 
-    // relax edge
+    /**
+     * Relax edge
+     */
     private void relax(double[] distanceTo, int[] edgeTo, int i, int currentStop) {
 
         if (distanceTo[i] > distanceTo[currentStop] + adjacencyList[currentStop][i]) {
@@ -195,6 +186,13 @@ public class shortestRoutePath {
             edgeTo[i] = currentStop;
         }
     }
+
+    /**
+     * This method {@code manageRequest()} is called from the interface and the user is prompted to input the
+     * two bus stops separately.
+     * The adjacency list {@code adjacencyList[][]} is then created and shortestRoutePath is called.
+     * The output is returned from shortestRoutePath and prints the cost and path associated with the route taken.
+     */
 
     public static void manageRequest() {
 
@@ -212,10 +210,11 @@ public class shortestRoutePath {
         int result1 = JOptionPane.showOptionDialog(null, panel1, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, option1, null);
 
-        if (result1 == 0) {
-            busStop1 = Integer.parseInt(textField1.getText());
-        }
-        else if(result1 != 0){
+        try {
+            if (result1 == 0) {
+                busStop1 = Integer.parseInt(textField1.getText());
+            }
+        } catch (NumberFormatException incorrectInput) {
             JOptionPane.showMessageDialog(null, "This is not a valid number. Please try again");
             manageRequest();
         }
@@ -231,10 +230,11 @@ public class shortestRoutePath {
         int result2 = JOptionPane.showOptionDialog(null, panel2, "Vancouver Bus Management System", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, option2, null);
 
-        if (result2 == 0) {
-            busStop2 = Integer.parseInt(textField2.getText());
-        }
-        else {
+        try {
+            if (result2 == 0) {
+                busStop2 = Integer.parseInt(textField2.getText());
+            }
+        } catch (NumberFormatException incorrectInput) {
             JOptionPane.showMessageDialog(null, "This is not a valid number. Please try again");
             manageRequest();
         }
@@ -243,8 +243,7 @@ public class shortestRoutePath {
 
         try {
             path.adjacencyList();
-        }
-        catch(FileNotFoundException exception){
+        } catch (FileNotFoundException exception) {
             exception.printStackTrace();
         }
 
