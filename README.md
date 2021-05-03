@@ -12,8 +12,8 @@ Group Contributions:
 
 Sean Mc Kenna: Set Up Repository, Intiliased Interface and  implimented Bus Stop Search Classes
 Ciaran Mc Kay: Formatted Deisgn Doc, Implimented The Search Arrival Time Classes
-Will O' Callaghan: 
-Luke Gilmartin
+Will O' Callaghan: (worked on sorting intial BST implimentation of Search Arrival Time), Implimented Shortest Route Path
+Luke Gilmartin: Implimented Shortest Route Path
 
 As a Group: Video Created, helped eachother with code throughout
 
