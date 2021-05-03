@@ -104,14 +104,15 @@ public class SearchArrivalTime <Key extends Comparable <Key>,Value> {
 
     public static void manageRequest(String key){
 
+        String keyWithoutColon = key.replaceAll(":","");
+
         try{
-            Integer.parseInt(key);
+            Integer.parseInt(keyWithoutColon);
         }catch(NumberFormatException e){
             JOptionPane.showMessageDialog(null,"Invalid input, you cannot enter text, it must be a valid time. Thank You");
             return;
         }
 
-        String keyWithoutColon = key.replaceAll(":","");
         int keyAsInt = Integer.parseInt(keyWithoutColon);
 
         if(key == null || keyAsInt > 235959 || keyAsInt < 0){
